@@ -680,6 +680,7 @@ public enum PayoutScheme
     SOLO = 3,
     PPS = 4,
     PPBS = 5,
+    PPLNSBF = 6,
 }
 
 public partial class ClusterLoggingConfig

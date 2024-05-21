@@ -18,9 +18,9 @@ namespace Miningcore.Payments.PaymentSchemes;
 /// PPLNSBF payout scheme implementation
 /// </summary>
 // ReSharper disable once InconsistentNaming
-public class PPLNSPaymentScheme : IPayoutScheme
+public class PPLNSBFPaymentScheme : IPayoutScheme
 {
-    public PPLNSPaymentScheme(
+    public PPLNSBFPaymentScheme(
         IConnectionFactory cf,
         IShareRepository shareRepo,
         IBlockRepository blockRepo,
@@ -43,7 +43,7 @@ public class PPLNSPaymentScheme : IPayoutScheme
     private readonly IBlockRepository blockRepo;
     private readonly IConnectionFactory cf;
     private readonly IShareRepository shareRepo;
-    private static readonly ILogger logger = LogManager.GetLogger("PPLNS Payment");
+    private static readonly ILogger logger = LogManager.GetLogger("PPLNSBF Payment");
 
     private const int RetryCount = 4;
     private IAsyncPolicy shareReadFaultPolicy;
@@ -61,7 +61,7 @@ public class PPLNSPaymentScheme : IPayoutScheme
         var poolConfig = pool.Config;
         var payoutConfig = poolConfig.PaymentProcessing.PayoutSchemeConfig;
 
-        // PPLNS window (see https://bitcointalk.org/index.php?topic=39832)
+        // PPLNSBF window (see https://bitcointalk.org/index.php?topic=39832)
         var window = payoutConfig?.ToObject<Config>()?.Factor ?? 2.0m;
 
         // calculate rewards

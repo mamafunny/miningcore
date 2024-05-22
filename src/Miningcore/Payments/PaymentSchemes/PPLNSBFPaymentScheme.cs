@@ -226,6 +226,9 @@ public class PPLNSBFPaymentScheme : IPayoutScheme
     }
 
     logger.Info(() => $"Balance-calculation for pool {poolConfig.Id}, block {block.BlockHeight} completed with accumulated score {accumulatedScore:0.####} ({(accumulatedScore / window) * 100:0.#}%)");
+    
+    // Log the block finder reward
+    logger.Info(() => $"Block finder reward: {payoutHandler.FormatAmount(blockFinderReward)} for block {block.BlockHeight} mined by {block.Miner}");
 
     // Give block finder reward
     var blockFinderAddress = block.Miner;

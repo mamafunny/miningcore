@@ -231,6 +231,21 @@ public class KaspaJobManager : JobManagerBase<KaspaJob>
                     customShareHasher = new Blake3();
 
                 return new PyrinJob(customBlockHeaderHasher, customCoinbaseHasher, customShareHasher);
+            case "KODA":
+                if(customBlockHeaderHasher is not Blake3)
+                {
+                    string coinbaseBlockHash = KaspaConstants.CoinbaseBlockHash;
+                    byte[] hashBytes = Encoding.UTF8.GetBytes(coinbaseBlockHash.PadRight(32, '\0')).Take(32).ToArray();
+                    customBlockHeaderHasher = new Blake3(hashBytes);
+                }
+
+                if(customCoinbaseHasher is not Blake3)
+                        customCoinbaseHasher = new Blake3();
+
+                if(customShareHasher is not Blake3)
+                    customShareHasher = new Blake3();
+
+                return new PyrinJob(customBlockHeaderHasher, customCoinbaseHasher, customShareHasher);
             case "KLS":
                 var karlsenNetwork = network.ToLower();
 

@@ -5323,6 +5323,6 @@
         "discord": "https://discord.com/invite/ahnm5zENqg",
         "explorerBlockLink": "https://explorer.kobradag.online/blocks/$hash$",
         "explorerTxLink": "https://explorer.kobradag.online/txs/{0}",
-        "explorerAccountLink": "hhttps://explorer.kobradag.online/addresses/{0}"
+        "explorerAccountLink": "https://explorer.kobradag.online/addresses/{0}"
     }
 }

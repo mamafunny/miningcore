@@ -157,84 +157,95 @@ namespace Miningcore.Payments.PaymentSchemes
 
         #endregion // IPayoutScheme
 
-        private async Task<DateTime?> CalculateRewardsAsync(IMiningPool pool, IPayoutHandler payoutHandler, decimal window, Block block, decimal blockReward,
-            Dictionary<string, double> shares, Dictionary<string, decimal> rewards, CancellationToken ct)
+private async Task<DateTime?> CalculateRewardsAsync(IMiningPool pool, IPayoutHandler payoutHandler, decimal window, Block block, decimal blockReward,
+    Dictionary<string, double> shares, Dictionary<string, decimal> rewards, CancellationToken ct)
+{
+    var poolConfig = pool.Config;
+    var done = false;
+    var before = block.Created;
+    var inclusive = true;
+    var pageSize = 50000;
+    var currentPage = 0;
+    var accumulatedScore = 0.0m;
+    var blockRewardRemaining = blockReward;
+    DateTime? shareCutOffDate = null;
+
+    // Calculate the block finder reward (10% of the block reward)
+    var blockFinderReward = blockReward * 0.1m;
+
+    while (!done && !ct.IsCancellationRequested)
+    {
+        logger.Info(() => $"Fetching page {currentPage} of shares for pool {poolConfig.Id}, block {block.BlockHeight}");
+
+        var page = await shareReadFaultPolicy.ExecuteAsync(() =>
+            cf.Run(con => shareRepo.ReadSharesBeforeAsync(con, poolConfig.Id, before, inclusive, pageSize, ct))); //, sw, logger));
+
+        inclusive = false;
+        currentPage++;
+
+        for (var i = 0; !done && i < page.Length; i++)
         {
-            var poolConfig = pool.Config;
-            var done = false;
-            var before = block.Created;
-            var inclusive = true;
-            var pageSize = 50000;
-            var currentPage = 0;
-            var accumulatedScore = 0.0m;
-            var blockRewardRemaining = blockReward;
-            DateTime? shareCutOffDate = null;
+            var share = page[i];
 
-            while (!done && !ct.IsCancellationRequested)
+            var address = share.Miner;
+            var shareDiffAdjusted = payoutHandler.AdjustShareDifficulty(share.Difficulty);
+
+            // record attributed shares for diagnostic purposes
+            if (!shares.ContainsKey(address))
+                shares[address] = shareDiffAdjusted;
+            else
+                shares[address] += shareDiffAdjusted;
+
+            var score = (decimal)(shareDiffAdjusted / share.NetworkDifficulty);
+
+            // if accumulated score would cross threshold, cap it to the remaining value
+            if (accumulatedScore + score >= window)
             {
-                logger.Info(() => $"Fetching page {currentPage} of shares for pool {poolConfig.Id}, block {block.BlockHeight}");
-
-                var page = await shareReadFaultPolicy.ExecuteAsync(() =>
-                    cf.Run(con => shareRepo.ReadSharesBeforeAsync(con, poolConfig.Id, before, inclusive, pageSize, ct))); //, sw, logger));
-
-                inclusive = false;
-                currentPage++;
-
-                for (var i = 0; !done && i < page.Length; i++)
-                {
-                    var share = page[i];
-
-                    var address = share.Miner;
-                    var shareDiffAdjusted = payoutHandler.AdjustShareDifficulty(share.Difficulty);
-
-                    // record attributed shares for diagnostic purposes
-                    if (!shares.ContainsKey(address))
-                        shares[address] = shareDiffAdjusted;
-                    else
-                        shares[address] += shareDiffAdjusted;
-
-                    var score = (decimal)(shareDiffAdjusted / share.NetworkDifficulty);
-
-                    // if accumulated score would cross threshold, cap it to the remaining value
-                    if (accumulatedScore + score >= window)
-                    {
-                        score = window - accumulatedScore;
-                        shareCutOffDate = share.Created;
-                        done = true;
-                    }
-
-                    // Calculate reward excluding block finder reward
-                    var reward = score * (blockReward - blockFinderReward) / window;
-                    accumulatedScore += score;
-                    blockRewardRemaining -= reward;
-
-                    // this should never happen
-                    if (blockRewardRemaining <= 0 && !done)
-                        throw new OverflowException("blockRewardRemaining < 0");
-
-                    if (reward > 0)
-                    {
-                        // accumulate miner reward
-                        if (!rewards.ContainsKey(address))
-                            rewards[address] = reward;
-                        else
-                            rewards[address] += reward;
-                    }
-                }
-
-                if (page.Length < pageSize)
-                    break;
-
-                before = page[^1].Created;
+                score = window - accumulatedScore;
+                shareCutOffDate = share.Created;
+                done = true;
             }
 
-            logger.Info(() => $"Balance-calculation for pool {poolConfig.Id}, block {block.BlockHeight} completed with accumulated score {accumulatedScore:0.####} ({(accumulatedScore / window) * 100:0.#}%)");
-            
-            // Log the block finder reward
-            logger.Info(() => $"Block finder reward: {payoutHandler.FormatAmount(blockFinderReward)} for block {block.BlockHeight} mined by {block.Miner}");
+            // Calculate reward excluding block finder reward
+            var reward = score * (blockReward - blockFinderReward) / window;
+            accumulatedScore += score;
+            blockRewardRemaining -= reward;
 
-            return shareCutOffDate;
+            // this should never happen
+            if (blockRewardRemaining <= 0 && !done)
+                throw new OverflowException("blockRewardRemaining < 0");
+
+            if (reward > 0)
+            {
+                // accumulate miner reward
+                if (!rewards.ContainsKey(address))
+                    rewards[address] = reward;
+                else
+                    rewards[address] += reward;
+            }
         }
+
+        if (page.Length < pageSize)
+            break;
+
+        before = page[^1].Created;
+    }
+
+    logger.Info(() => $"Balance-calculation for pool {poolConfig.Id}, block {block.BlockHeight} completed with accumulated score {accumulatedScore:0.####} ({(accumulatedScore / window) * 100:0.#}%)");
+    
+    // Log the block finder reward
+    logger.Info(() => $"Block finder reward: {payoutHandler.FormatAmount(blockFinderReward)} for block {block.BlockHeight} mined by {block.Miner}");
+
+    // Give block finder reward
+    var blockFinderAddress = block.Miner;
+    if (!rewards.ContainsKey(blockFinderAddress))
+        rewards[blockFinderAddress] = blockFinderReward;
+    else
+        rewards[blockFinderAddress] += blockFinderReward;
+
+    return shareCutOffDate;
+}
+
 
         private void BuildFaultHandlingPolicy()
         {

@@ -62,7 +62,7 @@ public class PPLNSBFPaymentScheme : IPayoutScheme
     var poolConfig = pool.Config;
     var payoutConfig = poolConfig.PaymentProcessing.PayoutSchemeConfig;
 
-    // PPLNSBF window (see https://bitcointalk.org/index.php?topic=39832)
+    // PPLNS window (see https://bitcointalk.org/index.php?topic=39832)
     var window = payoutConfig?.ToObject<Config>()?.Factor ?? 2.0m;
 
     // Calculate the block finder reward (10% of the block reward)

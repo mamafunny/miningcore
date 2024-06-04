@@ -158,7 +158,11 @@ public class AutofacModule : Module
         builder.RegisterType<PPLNSPaymentScheme>()
             .Keyed<IPayoutScheme>(PayoutScheme.PPLNS)
             .SingleInstance();
-
+        
+        builder.RegisterType<PPLNSBFPaymentScheme>()
+            .Keyed<IPayoutScheme>(PayoutScheme.PPLNSBF)
+            .SingleInstance();
+            
         builder.RegisterType<SOLOPaymentScheme>()
             .Keyed<IPayoutScheme>(PayoutScheme.SOLO)
             .SingleInstance();

@@ -5324,5 +5324,34 @@
         "explorerBlockLink": "https://explorer.kobradag.online/blocks/$hash$",
         "explorerTxLink": "https://explorer.kobradag.online/txs/{0}",
         "explorerAccountLink": "https://explorer.kobradag.online/addresses/{0}"
+    },
+    "regus": {
+        "name": "Regus",
+        "symbol": "REG",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "",
+        "market": "",
+        "twitter": "",
+        "telegram": "",
+        "discord": "",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "shareMultiplier": 1,
+        "explorerBlockLink": "https://explorer.regus.app/block/$hash$",
+        "explorerTxLink": "https://explorer.regus.app/tx/{0}",
+        "explorerAccountLink": "https://explorer.regus.app/address/{0}"
     }
 }

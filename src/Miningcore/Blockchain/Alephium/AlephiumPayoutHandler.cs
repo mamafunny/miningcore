@@ -71,6 +71,7 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
                 network = "mainnet";
                 break;
             case 1:
+            case 7:
                 network = "testnet";
                 break;
             case 4:
@@ -105,107 +106,156 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
             for(var j = 0; j < page.Length; j++)
             {
                 var block = page[j];
-                
+
+                List<Settlement> blockRewardTransactions;
+                BlockEntry blockInfo;
+
                 var isBlockInMainChain = await Guard(() => alephiumClient.GetBlockflowIsBlockInMainChainAsync((string) block.Hash, ct),
                     ex=> logger.Debug(ex));
 
-                // We lost that battle
+                // Starting with Rhone-Upgrade - https://docs.alephium.org/integration/mining/#rhone-upgrade - "Ghost" uncles are now a thing on ALPH
+                // When a Block is not found in main chain, we must check now if it could be a "ghost" uncle
                 if(!isBlockInMainChain)
                 {
-                    result.Add(block);
-                    
-                    block.Status = BlockStatus.Orphaned;
-                    block.Reward = 0;
-                    
-                    logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} classified as orphaned because it's not the chain");
+                    block.Type = AlephiumConstants.BlockTypeUncle;
 
-                    messageBus.NotifyBlockUnlocked(poolConfig.Id, block, coin);
-                    continue;
+                    // get uncle block info
+                    blockInfo = await Guard(() => alephiumClient.UncleHashAsync((string) block.Hash, ct),
+                        ex=> logger.Debug(ex));
+
+                    // Dang, not even a "ghost" uncle, we definitely lost that battle :'(
+                    if(blockInfo == null)
+                    {
+                        result.Add(block);
+
+                        block.Status = BlockStatus.Orphaned;
+                        block.Reward = 0;
+
+                        logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] classified as orphaned because it's not the chain and not even a 'ghost' uncle");
+
+                        messageBus.NotifyBlockUnlocked(poolConfig.Id, block, coin);
+                        
+                        continue;
+                    }
+                    else
+                    {
+                        logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] is a possible ghost uncle. It contains {blockInfo.Transactions.Count} transaction(s)");
+
+                        // we only need the transaction(s) related to the block reward
+                        blockRewardTransactions = blockInfo.Transactions
+                            .Where(x => x.Unsigned.Inputs.Count < 1)
+                            .ToList();
+                    }
                 }
                 else
                 {
+                    block.Type = AlephiumConstants.BlockTypeBlock;
+
                     // get block info
-                    var blockInfo = await Guard(() => alephiumClient.HashAsync((string) block.Hash, ct),
+                    blockInfo = await Guard(() => alephiumClient.HashAsync((string) block.Hash, ct),
                         ex=> logger.Debug(ex));
 
-                    logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} contains {blockInfo.Transactions.Count} transaction(s)");
+                    logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {blockInfo.Transactions.Count} transaction(s)");
 
+                    // we only need the transaction(s) related to the block reward
+                    blockRewardTransactions = blockInfo.Transactions
+                        .Where(x => x.Unsigned.Inputs.Count < 1)
+                        .ToList();
+                }
+
+                logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {blockRewardTransactions.Count} transaction(s) related to the block reward");
+
+                // Money time
+                if(blockRewardTransactions.Count > 0)
+                {
                     // get wallet miner's addresses
                     var walletMinersAddresses = await Guard(() => alephiumClient.GetMinersAddressesAsync(ct),
                         ex=> logger.Debug(ex));
 
-                    // we only need the transaction(s) related to the block reward
-                    var blockRewardTransactions = blockInfo.Transactions
-                        .Where(x => x.Unsigned.Inputs.Count < 1)
+                    // We only need the transaction(s) for our wallet miner's addresses
+                    blockRewardTransactions = blockRewardTransactions
+                        .Where(x =>
+                        {
+                            var fixedOutputs = x.Unsigned.FixedOutputs
+                                .Where(y => walletMinersAddresses.Addresses.Contains(y.Address))
+                                .ToList();
+
+                            return fixedOutputs.Count > 0;
+                        })
                         .ToList();
 
-                    logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} contains {blockRewardTransactions.Count} transaction(s) related to the block reward");
+                    logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {blockRewardTransactions.Count} transaction(s) related to our wallet miner's addresses");
 
-                    // update real blockHeight from chain if necessary
-                    //if (block.BlockHeight != blockInfo.Height)
-                        //block.BlockHeight = blockInfo.Height;
-
-                    // update progress
-                    // Two block confirmations methods are available:
-                    // 1) ALPH default lock mechanism: All of the mined coins are locked for N minutes (up to +8 hours on mainnet, very short on testnet)
-                    // 2) Mining pool operator provides a custom block rewards lock time, this method must be ONLY USE ON TESTNET in order to mimic MAINNET
-                    if(extraPoolPaymentProcessingConfig?.BlockRewardsLockTime == null)
+                    if(blockRewardTransactions.Count > 0)
                     {
-                        logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} uses the default block reward lock mechanism for minimum confirmations calculation");
-
-                        decimal transactionsLockTime = 0;
-                        int totalTransactionsLockTime = 0;
-                        foreach (var blockTransactionLockTime in blockRewardTransactions)
+                        // update progress
+                        // Two block confirmations methods are available:
+                        // 1) ALPH default lock mechanism: All of the mined coins are locked for N minutes (up to +8 hours on mainnet, very short on testnet)
+                        // 2) Mining pool operator provides a custom block rewards lock time, this method must be ONLY USE ON TESTNET in order to mimic MAINNET
+                        if(extraPoolPaymentProcessingConfig?.BlockRewardsLockTime == null)
                         {
-                            foreach (var unsignedLockTimeFixedOutputs in blockTransactionLockTime.Unsigned.FixedOutputs)
+                            logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] uses the default block reward lock mechanism for minimum confirmations calculation");
+
+                            decimal transactionsLockTime = 0;
+                            int totalTransactionsLockTime = 0;
+                            foreach (var blockTransactionLockTime in blockRewardTransactions)
                             {
-                                // We only need the transaction(s) for our wallet miner's addresses
-                                if(walletMinersAddresses.Addresses.Contains(unsignedLockTimeFixedOutputs.Address))
+                                foreach (var unsignedLockTimeFixedOutputs in blockTransactionLockTime.Unsigned.FixedOutputs)
                                 {
                                     transactionsLockTime += (decimal) unsignedLockTimeFixedOutputs.LockTime;
                                     totalTransactionsLockTime += 1;
                                 }
                             }
+                            if(totalTransactionsLockTime > 0)
+                                transactionsLockTime /= totalTransactionsLockTime;
+
+                            block.ConfirmationProgress = Math.Min(1.0d, (double) ((AlephiumUtils.UnixTimeStampForApi(clock.Now) - blockInfo.Timestamp) / (transactionsLockTime - blockInfo.Timestamp)));
                         }
-                        if(totalTransactionsLockTime > 0)
-                            transactionsLockTime /= totalTransactionsLockTime;
-
-                        block.ConfirmationProgress = Math.Min(1.0d, (double) ((AlephiumUtils.UnixTimeStampForApi(clock.Now) - blockInfo.Timestamp) / (transactionsLockTime - blockInfo.Timestamp)));
-                    }
-                    else
-                    {
-                        logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} uses a custom [{network}] block rewards lock time: [{extraPoolPaymentProcessingConfig?.BlockRewardsLockTime}] minute(s)");
-
-                        block.ConfirmationProgress = Math.Min(1.0d, (double) ((AlephiumUtils.UnixTimeStampForApi(clock.Now) - blockInfo.Timestamp) / ((decimal) extraPoolPaymentProcessingConfig?.BlockRewardsLockTime * 60 * 1000)));
-                    }
-
-                    result.Add(block);
-
-                    messageBus.NotifyBlockConfirmationProgress(poolConfig.Id, block, coin);
-
-                    // matured and spendable?
-                    if(block.ConfirmationProgress >= 1)
-                    {
-                        block.Status = BlockStatus.Confirmed;
-                        block.ConfirmationProgress = 1;
-
-                        // reset block reward
-                        block.Reward = 0;
-
-                        foreach (var blockTransaction in blockRewardTransactions)
+                        else
                         {
-                            foreach (var unsignedFixedOutputs in blockTransaction.Unsigned.FixedOutputs)
-                            {
-                                // We only need the transaction(s) for our wallet miner's addresses
-                                if(walletMinersAddresses.Addresses.Contains(unsignedFixedOutputs.Address))
-                                    block.Reward += AlephiumUtils.ConvertNumberFromApi(unsignedFixedOutputs.AttoAlphAmount) / AlephiumConstants.SmallestUnit;
-                            }
+                            logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] uses a custom [{network}] block rewards lock time: [{extraPoolPaymentProcessingConfig?.BlockRewardsLockTime}] minute(s)");
+
+                            block.ConfirmationProgress = Math.Min(1.0d, (double) ((AlephiumUtils.UnixTimeStampForApi(clock.Now) - blockInfo.Timestamp) / ((decimal) extraPoolPaymentProcessingConfig?.BlockRewardsLockTime * 60 * 1000)));
                         }
 
-                        logger.Info(() => $"[{LogCategory}] Unlocked block {block.BlockHeight} worth {FormatAmount(block.Reward)}");
-                        messageBus.NotifyBlockUnlocked(poolConfig.Id, block, coin);
+                        result.Add(block);
+
+                        messageBus.NotifyBlockConfirmationProgress(poolConfig.Id, block, coin);
+
+                        // matured and spendable?
+                        if(block.ConfirmationProgress >= 1)
+                        {
+                            block.Status = BlockStatus.Confirmed;
+                            block.ConfirmationProgress = 1;
+
+                            // reset block reward
+                            block.Reward = 0;
+
+                            foreach (var blockTransaction in blockRewardTransactions)
+                            {
+                                foreach (var unsignedFixedOutputs in blockTransaction.Unsigned.FixedOutputs)
+                                {
+                                    block.Reward += AlephiumUtils.ConvertNumberFromApi(unsignedFixedOutputs.AttoAlphAmount) / AlephiumConstants.SmallestUnit;
+                                }
+                            }
+
+                            logger.Info(() => $"[{LogCategory}] Unlocked block {block.BlockHeight} [{block.Hash}] worth {FormatAmount(block.Reward)}");
+                            messageBus.NotifyBlockUnlocked(poolConfig.Id, block, coin);
+                        }
+
+                        continue;
                     }
                 }
+
+                // If we end here that only means that we definitely lost that battle :'(
+                result.Add(block);
+
+                block.Status = BlockStatus.Orphaned;
+                block.Reward = 0;
+
+                logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] classified as orphaned because it's not the chain");
+
+                messageBus.NotifyBlockUnlocked(poolConfig.Id, block, coin);
             }
         }
 
@@ -215,7 +265,20 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
     public virtual async Task PayoutAsync(IMiningPool pool, Balance[] balances, CancellationToken ct)
     {
         Contract.RequiresNonNull(balances);
+
+        var infosChainParams = await Guard(() => alephiumClient.GetInfosChainParamsAsync(ct));
+
+        var info = await Guard(() => alephiumClient.GetInfosInterCliquePeerInfoAsync(ct));
         
+        if(infosChainParams?.NetworkId != 7)
+        {
+            if(info?.Count < 1)
+            {
+                logger.Warn(() => $"[{LogCategory}] Payout aborted. Not enough peer(s)");
+                return;
+            }
+        }
+
         // build args
         var amounts = balances
             .Where(x => x.Amount > 0)

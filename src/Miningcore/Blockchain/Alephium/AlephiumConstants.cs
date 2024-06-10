@@ -19,6 +19,9 @@ public static class AlephiumConstants
     public const uint ShareMultiplier = 1;
     // ALPH smallest unit is called PHI: https://wiki.alephium.org/glossary#gas-price
     public const decimal SmallestUnit = 1000000000000000000;
+
+    public const string BlockTypeUncle = "uncle";
+    public const string BlockTypeBlock = "block";
     
     // Socket miner API
     public const int MessageHeaderSize = 4; // 4 bytes body length

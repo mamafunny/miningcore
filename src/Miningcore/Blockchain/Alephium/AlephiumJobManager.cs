@@ -331,31 +331,28 @@ public class AlephiumJobManager : JobManagerBase<AlephiumJob>
                                 validJobs.RemoveAt(validJobs.Count - 1);
                         }
 
-                        if(isNew)
-                        {
-                            if(via != null)
-                                logger.Info(() => $"Detected new block {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}] [{via}]");
-                            else
-                                logger.Info(() => $"Detected new block {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}]");
-
-                            // update stats
-                            if ((job.BlockTemplate.Height - 1) > BlockchainStats.BlockHeight)
-                            {
-                                // update stats
-                                BlockchainStats.LastNetworkBlockTime = clock.Now;
-                                BlockchainStats.BlockHeight = job.BlockTemplate.Height - 1;
-                            }
-                        }
-
+                        if(via != null)
+                            logger.Info(() => $"Detected new block {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}] [{via}]");
                         else
+                            logger.Info(() => $"Detected new block {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}]");
+
+                        // update stats
+                        if ((job.BlockTemplate.Height - 1) > BlockchainStats.BlockHeight)
                         {
-                            if(via != null)
-                                logger.Debug(() => $"Template update {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}] [{via}]");
-                            else
-                                logger.Debug(() => $"Template update {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}]");
+                            // update stats
+                            BlockchainStats.LastNetworkBlockTime = clock.Now;
+                            BlockchainStats.BlockHeight = job.BlockTemplate.Height - 1;
                         }
 
                         currentJob = job;
+                    }
+
+                    else
+                    {
+                        if(via != null)
+                            logger.Debug(() => $"Template update {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}] [{via}]");
+                        else
+                            logger.Debug(() => $"Template update {job.BlockTemplate.Height} on chain[{job.BlockTemplate.ChainIndex}]");
                     }
 
                     return isNew;
@@ -632,6 +629,7 @@ public class AlephiumJobManager : JobManagerBase<AlephiumJob>
                 network = "mainnet";
                 break;
             case 1:
+            case 7:
                 network = "testnet";
                 break;
             case 4:
@@ -694,6 +692,9 @@ public class AlephiumJobManager : JobManagerBase<AlephiumJob>
 
     protected override async Task<bool> AreDaemonsConnectedAsync(CancellationToken ct)
     {
+        var infosChainParams = await Guard(() => rpc.GetInfosChainParamsAsync(ct),
+            ex=> logger.Debug(ex));
+
         var info = await Guard(() => rpc.GetInfosInterCliquePeerInfoAsync(ct),
             ex=> logger.Debug(ex));
         
@@ -704,7 +705,10 @@ public class AlephiumJobManager : JobManagerBase<AlephiumJob>
         if(!string.IsNullOrEmpty(nodeInfo?.BuildInfo.ReleaseVersion))
             BlockchainStats.NodeVersion = nodeInfo?.BuildInfo.ReleaseVersion;
 
-        return info?.Count > 0;
+        if(infosChainParams?.NetworkId != 7)
+            return info?.Count > 0;
+
+        return true;
     }
 
     protected override async Task EnsureDaemonsSynchedAsync(CancellationToken ct)

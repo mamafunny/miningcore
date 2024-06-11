@@ -244,9 +244,6 @@ public class ProgpowJob : BitcoinJob
         if (coin.HasMinerFund)
             minerFundParameters = BlockTemplate.Extra.SafeExtensionDataAs<MinerFundTemplateExtra>("coinbasetxn", "minerfund");
 
-		if(coin.HasFounderValue)
-			FounderValueParams = BlockTemplate.Extra.SafeExtensionDataAs<FounderValueBlockTemplateExtra>();
-
         this.coinbaseHasher = coinbaseHasher;
         this.headerHasher = headerHasher;
         this.blockHasher = blockHasher;

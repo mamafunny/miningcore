@@ -5353,5 +5353,38 @@
         "explorerBlockLink": "https://explorer.regus.app/block/$hash$",
         "explorerTxLink": "https://explorer.regus.app/tx/{0}",
         "explorerAccountLink": "https://explorer.regus.app/address/{0}"
+    },
+    "smartmeme": {
+        "name": "SmartMeme",
+        "symbol": "SMME",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "https://smartmeme.online/",
+        "market": "",
+        "twitter": "https://x.com/SmartmemeSmme",
+        "telegram": "",
+        "discord": "",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "hasFounderFee": true,
+        "hasMasterNodes": true,
+        "hasSmartNodes": true,
+        "foundersRewardAddress": ["SWEnFHZcj7WZTuSdZ6hdpgWoLMk5TLhhD9"],
+        "shareMultiplier": 1,
+        "explorerBlockLink": "http://explorer.smartmeme.online/block/$hash$",
+        "explorerTxLink": "http://explorer.smartmeme.online/tx/{0}",
+        "explorerAccountLink": "http://explorer.smartmeme.online/address/{0}"
     }
 }

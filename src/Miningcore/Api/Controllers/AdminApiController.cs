@@ -7,6 +7,7 @@ using Miningcore.Util;
 using System.Collections.Concurrent;
 using System.Net;
 using NLog;
+using NLog.Targets;
 
 namespace Miningcore.Api.Controllers;
 
@@ -33,6 +34,116 @@ public class AdminApiController : ApiControllerBase
     private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
     #region Actions
+
+    [HttpGet("logging/level/{level}")]
+    public ActionResult<string> SetLoggingLevel(string level)
+    {
+        if (string.IsNullOrEmpty(level))
+            throw new ApiException("Invalid logging level", HttpStatusCode.BadRequest);
+
+        var logLevel = LogLevel.FromString(level);
+
+        if (logLevel == null)
+            throw new ApiException("Invalid logging level", HttpStatusCode.BadRequest);
+
+        logger.Error("Admin update Logging Level this is Error");
+        logger.Trace("Admin update Logging Level this is Trace");
+
+        foreach (var rule in LogManager.Configuration.LoggingRules)
+        {
+            rule.EnableLoggingForLevel(logLevel);
+            rule.SetLoggingLevels(logLevel, LogLevel.Fatal); // set minimum logging level
+        }
+
+        Target target = LogManager.Configuration.FindTargetByName("console");
+
+        if (target != null)
+        {
+            var loggingConfig = LogManager.Configuration;
+
+            loggingConfig.AddRule(logLevel, LogLevel.Fatal, target);
+
+            LogManager.Configuration = loggingConfig;
+        }
+
+        LogManager.ReconfigExistingLoggers();
+
+        logger.Error("Admin update Logging Level this is Error AFTER");
+        logger.Trace("Admin update Logging Level this is Trace AFTER");
+
+        logger.Info($"Logging level set to {level}");
+        return "Ok";
+    }
+
+    [HttpGet("payment/processing/enable")]
+    public ActionResult<string> EnablePoolsPaymentProcessing()
+    {
+        var poolIdsUpdated = new List<string>();
+        foreach(var pool in pools.Values)
+        {
+            if(!pool.Config.Enabled)
+                continue;
+
+            poolIdsUpdated.Add(pool.Config.Id);
+            pool.Config.PaymentProcessing.Enabled = true;
+        }
+
+        // Join the poolIdsUpdated into CSV string
+        var poolIdsCsv = String.Join(",", poolIdsUpdated);
+        logger.Info(()=> $"Enabled payment processing for pool {poolIdsCsv}");
+
+        return poolIdsCsv;
+    }
+
+    [HttpGet("payment/processing/disable")]
+    public ActionResult<string> DisablePoolsPaymentProcessing()
+    {
+        var poolIdsUpdated = new List<string>();
+        foreach(var pool in pools.Values)
+        {
+            if(!pool.Config.Enabled)
+                continue;
+
+            poolIdsUpdated.Add(pool.Config.Id);
+            pool.Config.PaymentProcessing.Enabled = false;
+        }
+
+        // Join the poolIdsUpdated into CSV string
+        var poolIdsCsv = String.Join(",", poolIdsUpdated);
+        logger.Info(()=> $"Disabled payment processing for pool {poolIdsCsv}");
+
+        return poolIdsCsv;
+    }
+
+    [HttpGet("payment/processing/{poolId}/enable")]
+    public ActionResult<string> EnablePoolPaymentProcessing(string poolId)
+    {
+        if (string.IsNullOrEmpty(poolId))
+            throw new ApiException("Missing pool ID", HttpStatusCode.BadRequest);
+
+        pools.TryGetValue(poolId, out var poolInstance);
+        if(poolInstance == null)
+            return "-1";
+
+        poolInstance.Config.PaymentProcessing.Enabled = true;
+        logger.Info(()=> $"Enabled payment processing for pool {poolId}");
+        return "Ok";
+    }
+
+    [HttpGet("payment/processing/{poolId}/disable")]
+    public ActionResult<string> DisablePoolPaymentProcessing(string poolId)
+    {
+        if (string.IsNullOrEmpty(poolId))
+            throw new ApiException("Missing pool ID", HttpStatusCode.BadRequest);
+
+        pools.TryGetValue(poolId, out var poolInstance);
+        if(poolInstance == null)
+            return "-1";
+
+        poolInstance.Config.PaymentProcessing.Enabled = false;
+        logger.Info(()=> $"Disabled payment processing for pool {poolId}");
+        return "Ok";
+    }
 
     [HttpGet("stats/gc")]
     public ActionResult<Responses.AdminGcStats> GetGcStats()

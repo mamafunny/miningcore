@@ -10644,6 +10644,10 @@ namespace Miningcore.Blockchain.Alephium
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Target { get; set; } = default!;
 
+        [Newtonsoft.Json.JsonProperty("ghostUncles", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<GhostUncleBlockEntry> GhostUncles { get; set; } = new System.Collections.ObjectModel.Collection<GhostUncleBlockEntry>();
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
         [Newtonsoft.Json.JsonExtensionData]
@@ -12074,6 +12078,28 @@ namespace Miningcore.Blockchain.Alephium
         [Newtonsoft.Json.JsonProperty("returnTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> ReturnTypes { get; set; } = new System.Collections.ObjectModel.Collection<string>();
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GhostUncleBlockEntry
+    {
+        [Newtonsoft.Json.JsonProperty("blockHash", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string BlockHash { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("miner", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Miner { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 

@@ -107,8 +107,11 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
             {
                 var block = page[j];
 
-                List<Settlement> blockRewardTransactions;
+                Settlement blockRewardTransaction;
+                FixedAssetOutput blockReward;
                 BlockEntry blockInfo;
+                // First output is always the mainchain reward FixedOutputs[0] and [1] and [2] would be uncles (if exist)
+                int blockRewardTransactionIndex = 0;
 
                 var isBlockInMainChain = await Guard(() => alephiumClient.GetBlockflowIsBlockInMainChainAsync((string) block.Hash, ct),
                     ex=> logger.Debug(ex));
@@ -142,9 +145,17 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
                         logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] is a possible ghost uncle. It contains {blockInfo.Transactions.Count} transaction(s)");
 
                         // we only need the transaction(s) related to the block reward
-                        blockRewardTransactions = blockInfo.Transactions
+                        blockRewardTransaction = blockInfo.Transactions
                             .Where(x => x.Unsigned.Inputs.Count < 1)
-                            .ToList();
+                            .LastOrDefault();
+
+                        // Get the index of our uncle (by HASH value) - either 0 or 1 (2 max uncles)
+                        var ghostUncleIndex = blockInfo.GhostUncles
+                            .ToList()
+                            .FindIndex(u => u.BlockHash == block.Hash);
+
+                        // Advance index pointer +1 due to mainchain reward
+                        blockRewardTransactionIndex = ghostUncleIndex + 1;
                     }
                 }
                 else
@@ -158,35 +169,29 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
                     logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {blockInfo.Transactions.Count} transaction(s)");
 
                     // we only need the transaction(s) related to the block reward
-                    blockRewardTransactions = blockInfo.Transactions
+                    blockRewardTransaction = blockInfo.Transactions
                         .Where(x => x.Unsigned.Inputs.Count < 1)
-                        .ToList();
+                        .LastOrDefault();
                 }
 
-                logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {blockRewardTransactions.Count} transaction(s) related to the block reward");
+                logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {(blockRewardTransaction == null ? 0 : blockRewardTransaction.Unsigned.FixedOutputs.Count)} transaction(s) related to the block reward");
 
                 // Money time
-                if(blockRewardTransactions.Count > 0)
+                if(blockRewardTransaction != null)
                 {
                     // get wallet miner's addresses
                     var walletMinersAddresses = await Guard(() => alephiumClient.GetMinersAddressesAsync(ct),
                         ex=> logger.Debug(ex));
 
-                    // We only need the transaction(s) for our wallet miner's addresses
-                    blockRewardTransactions = blockRewardTransactions
-                        .Where(x =>
-                        {
-                            var fixedOutputs = x.Unsigned.FixedOutputs
-                                .Where(y => walletMinersAddresses.Addresses.Contains(y.Address))
-                                .ToList();
+                    // We only need the transaction related to our block type
+                    blockReward = blockRewardTransaction.Unsigned.FixedOutputs.ElementAtOrDefault(blockRewardTransactionIndex);
+                    // We only need the transaction which rewards one of our wallet miner's addresses
+                    if(!walletMinersAddresses.Addresses.Contains(blockReward.Address))
+                        blockReward = null;
 
-                            return fixedOutputs.Count > 0;
-                        })
-                        .ToList();
+                    logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {(blockReward == null ? 0 : 1)} transaction related to our wallet miner's addresses");
 
-                    logger.Debug(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] contains {blockRewardTransactions.Count} transaction(s) related to our wallet miner's addresses");
-
-                    if(blockRewardTransactions.Count > 0)
+                    if(blockReward != null)
                     {
                         // update progress
                         // Two block confirmations methods are available:
@@ -196,18 +201,7 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
                         {
                             logger.Info(() => $"[{LogCategory}] Block {block.BlockHeight} [{block.Hash}] uses the default block reward lock mechanism for minimum confirmations calculation");
 
-                            decimal transactionsLockTime = 0;
-                            int totalTransactionsLockTime = 0;
-                            foreach (var blockTransactionLockTime in blockRewardTransactions)
-                            {
-                                foreach (var unsignedLockTimeFixedOutputs in blockTransactionLockTime.Unsigned.FixedOutputs)
-                                {
-                                    transactionsLockTime += (decimal) unsignedLockTimeFixedOutputs.LockTime;
-                                    totalTransactionsLockTime += 1;
-                                }
-                            }
-                            if(totalTransactionsLockTime > 0)
-                                transactionsLockTime /= totalTransactionsLockTime;
+                            decimal transactionsLockTime = (decimal) blockReward.LockTime;
 
                             block.ConfirmationProgress = Math.Min(1.0d, (double) ((AlephiumUtils.UnixTimeStampForApi(clock.Now) - blockInfo.Timestamp) / (transactionsLockTime - blockInfo.Timestamp)));
                         }
@@ -231,13 +225,7 @@ public class AlephiumPayoutHandler : PayoutHandlerBase,
                             // reset block reward
                             block.Reward = 0;
 
-                            foreach (var blockTransaction in blockRewardTransactions)
-                            {
-                                foreach (var unsignedFixedOutputs in blockTransaction.Unsigned.FixedOutputs)
-                                {
-                                    block.Reward += AlephiumUtils.ConvertNumberFromApi(unsignedFixedOutputs.AttoAlphAmount) / AlephiumConstants.SmallestUnit;
-                                }
-                            }
+                            block.Reward = AlephiumUtils.ConvertNumberFromApi(blockReward.AttoAlphAmount) / AlephiumConstants.SmallestUnit;
 
                             logger.Info(() => $"[{LogCategory}] Unlocked block {block.BlockHeight} [{block.Hash}] worth {FormatAmount(block.Reward)}");
                             messageBus.NotifyBlockUnlocked(poolConfig.Id, block, coin);

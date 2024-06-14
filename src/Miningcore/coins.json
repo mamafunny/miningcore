@@ -5381,7 +5381,7 @@
         "hasFounderFee": true,
         "hasMasterNodes": true,
         "hasSmartNodes": true,
-        "foundersRewardAddress": ["SWEnFHZcj7WZTuSdZ6hdpgWoLMk5TLhhD9"],
+        "foundersRewardAddress": ["SYVtMPLdh3iHnk4p46Q6XBG2PVQuqFkbet"],
         "shareMultiplier": 1,
         "explorerBlockLink": "http://explorer.smartmeme.online/block/$hash$",
         "explorerTxLink": "http://explorer.smartmeme.online/tx/{0}",

@@ -2304,6 +2304,36 @@
         "explorerTxLink": "https://ravencoin.network/rvn/transaction/{0}",
         "explorerAccountLink": "https://ravencoin.network/rvn/address/{0}"
     },
+    "cmusicai": {
+        "name": "CmusicAI",
+        "symbol": "CMS",
+        "family": "progpow",
+        "website": "https://cmusic.ai/",
+        "market": "https://www.coingecko.com/en/coins/cmusicai",
+        "twitter": "https://twitter.com/cmusicai",
+        "telegram": "https://t.me/+AEU6ZRI1OzphNGNh",
+        "discord": "https://discord.gg/EanhmGKxcg",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "hasCommunityAddress": true,
+        "shareMultiplier": 1,
+        "progpower": "kawpow",
+        "explorerBlockLink": "https://explorer.cmusic.ai/block/$hash$",
+        "explorerTxLink": "https://explorer.cmusic.ai/tx/{0}",
+        "explorerAccountLink": "https://explorer.cmusic.ai/address/{0}"
+    },
     "firo": {
         "name": "Firo",
         "symbol": "FIRO",

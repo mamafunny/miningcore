@@ -307,10 +307,10 @@ public class BitcoinPool : PoolBase
 
         if(requestedDiff > poolEndpoint.Difficulty)
         {
-            // context.VarDiff = null; // disable vardiff // Do not disable to change static diff to start diff.
+            context.VarDiff = null; // disable vardiff
             context.SetDifficulty(requestedDiff);
 
-            logger.Info(() => $"[{connection.ConnectionId}] Starting difficulty set to {requestedDiff} as requested by miner.");
+            logger.Info(() => $"[{connection.ConnectionId}] Difficulty set to {requestedDiff} as requested by miner. VarDiff now disabled.");
 
             // enabled
             result[BitcoinStratumExtensions.MinimumDiff] = true;

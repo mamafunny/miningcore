@@ -102,6 +102,7 @@ public class CryptonotePool : PoolBase
                     logger.Info(() => $"[{connection.ConnectionId}] Nicehash detected. Using API supplied difficulty of {nicehashDiff.Value}");
 
                     staticDiff = nicehashDiff;
+                    context.VarDiff = null; // disable vardiff for NiceHash                    
                 }
 
                 else
@@ -113,10 +114,10 @@ public class CryptonotePool : PoolBase
                (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
                    context.VarDiff == null && staticDiff.Value > context.Difficulty))
             {
-                context.VarDiff = null; // disable vardiff
+                // context.VarDiff = null; // disable vardiff // Do not disable to change static diff to start diff.
                 context.SetDifficulty(staticDiff.Value);
 
-                logger.Info(() => $"[{connection.ConnectionId}] Static difficulty set to {staticDiff.Value}");
+                logger.Info(() => $"[{connection.ConnectionId}] Starting difficulty set to {staticDiff.Value}");
             }
 
             // respond

@@ -140,6 +140,11 @@ public abstract partial class CoinTemplate
     /// </summary>
     [JsonProperty(Order = -9)]
     public string Github { get; set; }
+
+    /// shareMultiplier Link
+    /// </summary>
+    [JsonProperty(Order = -9)]
+    public string shareMultiplier { get; set; }
     
     /// <summary>
     /// Arbitrary extension data

@@ -3,6 +3,6 @@ updates:
 - package-ecosystem: nuget
   directory: "/src/Miningcore"
   schedule:
-    interval: monthly
-  open-pull-requests-limit: 10
+    interval: daily
+  open-pull-requests-limit: 50
   target-branch: dev

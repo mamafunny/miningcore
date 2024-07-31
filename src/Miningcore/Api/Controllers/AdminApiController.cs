@@ -127,7 +127,7 @@ public class AdminApiController : ApiControllerBase
 
         poolInstance.Config.PaymentProcessing.Enabled = true;
         logger.Info(()=> $"Enabled payment processing for pool {poolId}");
-        return "Ok";
+        return "Payment Enabled Successfully";
     }
 
     [HttpGet("payment/processing/{poolId}/disable")]
@@ -142,8 +142,40 @@ public class AdminApiController : ApiControllerBase
 
         poolInstance.Config.PaymentProcessing.Enabled = false;
         logger.Info(()=> $"Disabled payment processing for pool {poolId}");
-        return "Ok";
+        return "Payment Disable Successfully";
     }
+
+    // testing pool id enable / disable on admin api start here
+    [HttpGet("{poolId}/enable")]
+    public ActionResult<string> EnablePoolId(string poolId)
+    {
+        if (string.IsNullOrEmpty(poolId))
+            throw new ApiException("Missing pool ID", HttpStatusCode.BadRequest);
+
+        pools.TryGetValue(poolId, out var poolInstance);
+        if(poolInstance == null)
+            return "-1";
+
+        poolInstance.Config.Enabled = true;
+        logger.Info(()=> $"Enabled pool ID{poolId}");
+        return "{poolId} Enabled Successfully";
+    }
+
+    [HttpGet("{poolId}/disable")]
+    public ActionResult<string> DisablePoolId(string poolId)
+    {
+        if (string.IsNullOrEmpty(poolId))
+            throw new ApiException("Missing pool ID", HttpStatusCode.BadRequest);
+
+        pools.TryGetValue(poolId, out var poolInstance);
+        if(poolInstance == null)
+            return "-1";
+
+        poolInstance.Config.Enabled = false;
+        logger.Info(()=> $"Disabled pool Id{poolId}");
+        return "{poolId} Disabled Successfully";
+    }
+    // testing pool id enable / disable on admin api end here
 
     [HttpGet("stats/gc")]
     public ActionResult<Responses.AdminGcStats> GetGcStats()

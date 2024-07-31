@@ -19,19 +19,17 @@ public class BlockRepository : IBlockRepository
     {
         var mapped = mapper.Map<Entities.Block>(block);
 
-        // kaspa effort fix start here
-        // If the effort is less than 1e-8, multiply it by 1e9
+        // If the effort is less than 1e-8, multiply it by 4e9
         if (mapped.Effort < 1e-8)
         {
-            mapped.Effort *= 1e9;
+            mapped.Effort *= 4e9;
         }
 
-        // If the minerEffort is less than 1e-8, multiply it by 1e9
+        // If the minerEffort is less than 1e-8, multiply it by 4e9
         if (mapped.MinerEffort < 1e-8)
         {
-            mapped.MinerEffort *= 1e9;
+            mapped.MinerEffort *= 4e9;
         }
-        // kaspa effort fix end here
 
         const string query =
             @"INSERT INTO blocks(poolid, blockheight, networkdifficulty, status, type, transactionconfirmationdata,
@@ -52,19 +50,17 @@ public class BlockRepository : IBlockRepository
     {
         var mapped = mapper.Map<Entities.Block>(block);
 
-        // kaspa effort fix start here
-        // If the effort is less than 1e-8, multiply it by 1e9
+        // If the effort is less than 1e-8, multiply it by 4e9
         if (mapped.Effort < 1e-8)
         {
-            mapped.Effort *= 1e9;
+            mapped.Effort *= 4e9;
         }
 
-        // If the minerEffort is less than 1e-8, multiply it by 1e9
+        // If the minerEffort is less than 1e-8, multiply it by 4e9
         if (mapped.MinerEffort < 1e-8)
         {
-            mapped.MinerEffort *= 1e9;
+            mapped.MinerEffort *= 4e9;
         }
-        // kaspa effort fix end here
 
         const string query = @"UPDATE blocks SET blockheight = @blockheight, status = @status, type = @type,
             reward = @reward, effort = @effort, minereffort = @minereffort, confirmationprogress = @confirmationprogress, hash = @hash WHERE id = @id";
@@ -89,6 +85,22 @@ public class BlockRepository : IBlockRepository
             .ToArray();
     }
 
+    public async Task<Block[]> PageBlocksAsync(IDbConnection con, BlockStatus[] status, int page, int pageSize, CancellationToken ct)
+    {
+        const string query = @"SELECT * FROM blocks WHERE status = ANY(@status)
+            ORDER BY created DESC OFFSET @offset FETCH NEXT @pageSize ROWS ONLY";
+
+        return (await con.QueryAsync<Entities.Block>(new CommandDefinition(query, new
+        {
+            status = status.Select(x => x.ToString().ToLower()).ToArray(),
+            offset = page * pageSize,
+            pageSize
+        }, cancellationToken: ct)))
+            .Select(mapper.Map<Block>)
+            .ToArray();
+    }
+
+    
     public async Task<Block[]> PageMinerBlocksAsync(IDbConnection con, string poolId, string address, BlockStatus[] status,
         int page, int pageSize, CancellationToken ct)
     {
@@ -98,22 +110,7 @@ public class BlockRepository : IBlockRepository
         return (await con.QueryAsync<Entities.Block>(new CommandDefinition(query, new
         {
             poolId,
-	    address,
-            status = status.Select(x => x.ToString().ToLower()).ToArray(),
-            offset = page * pageSize,
-            pageSize
-        }, cancellationToken: ct)))
-            .Select(mapper.Map<Block>)
-            .ToArray();
-    }
-
-    public async Task<Block[]> PageBlocksAsync(IDbConnection con, BlockStatus[] status, int page, int pageSize, CancellationToken ct)
-    {
-        const string query = @"SELECT * FROM blocks WHERE status = ANY(@status)
-            ORDER BY created DESC OFFSET @offset FETCH NEXT @pageSize ROWS ONLY";
-
-        return (await con.QueryAsync<Entities.Block>(new CommandDefinition(query, new
-        {
+	        address,
             status = status.Select(x => x.ToString().ToLower()).ToArray(),
             offset = page * pageSize,
             pageSize
@@ -145,11 +142,11 @@ public class BlockRepository : IBlockRepository
             .Select(mapper.Map<Block>)
             .FirstOrDefault();
     }
-    
+
     public async Task<uint> GetBlockBeforeCountAsync(IDbConnection con, string poolId, BlockStatus[] status, DateTime before)
     {
         const string query = @"SELECT * FROM blocks WHERE poolid = @poolid AND status = ANY(@status) AND created < @before";
-        
+
         return await con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new
         {
             poolId,
@@ -162,6 +159,7 @@ public class BlockRepository : IBlockRepository
     {
         const string query = @"SELECT * FROM blocks WHERE poolid = @poolid AND miner = @miner AND status = ANY(@status) AND created < @before
             ORDER BY created DESC FETCH NEXT 1 ROWS ONLY";
+
         return (await con.QueryAsync<Entities.Block>(query, new
         {
             poolId,
@@ -179,7 +177,7 @@ public class BlockRepository : IBlockRepository
 
         return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
     }
-    
+
     public Task<uint> GetMinerBlockCountAsync(IDbConnection con, string poolId, string address, CancellationToken ct)
     {
         const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND miner = @address";
@@ -197,6 +195,7 @@ public class BlockRepository : IBlockRepository
     public Task<DateTime?> GetLastMinerBlockTimeAsync(IDbConnection con, string poolId, string address)
     {
         const string query = @"SELECT created FROM blocks WHERE poolid = @poolId AND miner = @address ORDER BY created DESC LIMIT 1";
+
         return con.ExecuteScalarAsync<DateTime?>(query, new { poolId, address });
     }
     
@@ -242,7 +241,7 @@ public class BlockRepository : IBlockRepository
     public async Task<uint> GetPoolDuplicateBlockAfterCountByPoolHeightNoTypeAndStatusAsync(IDbConnection con, string poolId, long height, BlockStatus[] status, DateTime after)
     {
         const string query = @"SELECT COUNT(id) FROM blocks WHERE poolid = @poolId AND blockheight = @height AND status = ANY(@status) AND created > @after";
-        
+
         return await con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new
         {
             poolId,

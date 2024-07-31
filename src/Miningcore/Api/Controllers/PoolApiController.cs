@@ -77,10 +77,10 @@ public class PoolApiController : ApiControllerBase
                     var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, config.Id, startTime, clock.Now));
 
                     //kaspa effort fix start here
-                    // If the effort is less than 1e-8, multiply it by 1e9
+                    // If the effort is less than 1e-8, multiply it by 4e9
                     if(poolEffort.HasValue && poolEffort.Value < 1e-8)
                     {
-                        poolEffort *= 1e9;
+                        poolEffort *= 4e9;
                     }
                     //kaspa effort fix end here
 
@@ -155,10 +155,10 @@ public class PoolApiController : ApiControllerBase
             var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, pool.Id, startTime, clock.Now));
 
             //kaspa effort fix start here
-            // If the effort is less than 1e-8, multiply it by 1e9
+            // If the effort is less than 1e-8, multiply it by 4e9
             if(poolEffort.HasValue && poolEffort.Value < 1e-8)
             {
-                poolEffort *= 1e9;
+                poolEffort *= 4e9;
             }
             //kaspa effort fix end here
 
@@ -264,16 +264,16 @@ public class PoolApiController : ApiControllerBase
             }
 
             //kaspa effort fix start here
-            // If the effort is less than 1e-8, multiply it by 1e9
+            // If the effort is less than 1e-8, multiply it by 4e9
             if(block.Effort < 1e-8)
             {
-                block.Effort *= 1e9;
+                block.Effort *= 4e9;
             }
 
-            // If the minerEffort is less than 1e-8, multiply it by 1e9
+            // If the minerEffort is less than 1e-8, multiply it by 4e9
             if(block.MinerEffort < 1e-8)
             {
-                block.MinerEffort *= 1e9;
+                block.MinerEffort *= 4e9;
             }
             //kaspa effort fix end here
 
@@ -433,10 +433,10 @@ public class PoolApiController : ApiControllerBase
             	var minerEffort = await cf.Run(con => shareRepo.GetMinerEffortBetweenCreatedAsync(con, pool.Id, address, startTime, clock.Now));
 
                 //kaspa effort fix start here
-                // If the effort is less than 1e-8, multiply it by 1e9
+                // If the effort is less than 1e-8, multiply it by 4e9
                 if(minerEffort.HasValue && minerEffort.Value < 1e-8)
                 {
-                    minerEffort *= 1e9;
+                    minerEffort *= 4e9;
                 }
                 //kaspa effort fix end here
 

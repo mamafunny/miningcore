@@ -19,6 +19,20 @@ public class BlockRepository : IBlockRepository
     {
         var mapped = mapper.Map<Entities.Block>(block);
 
+        // kaspa effort fix start here
+        // If the effort is less than 1e-8, multiply it by 1e9
+        if (mapped.Effort < 1e-8)
+        {
+            mapped.Effort *= 1e9;
+        }
+
+        // If the minerEffort is less than 1e-8, multiply it by 1e9
+        if (mapped.MinerEffort < 1e-8)
+        {
+            mapped.MinerEffort *= 1e9;
+        }
+        // kaspa effort fix end here
+
         const string query =
             @"INSERT INTO blocks(poolid, blockheight, networkdifficulty, status, type, transactionconfirmationdata,
                 miner, reward, effort, minereffort, confirmationprogress, source, hash, created)
@@ -37,6 +51,20 @@ public class BlockRepository : IBlockRepository
     public async Task UpdateBlockAsync(IDbConnection con, IDbTransaction tx, Block block)
     {
         var mapped = mapper.Map<Entities.Block>(block);
+
+        // kaspa effort fix start here
+        // If the effort is less than 1e-8, multiply it by 1e9
+        if (mapped.Effort < 1e-8)
+        {
+            mapped.Effort *= 1e9;
+        }
+
+        // If the minerEffort is less than 1e-8, multiply it by 1e9
+        if (mapped.MinerEffort < 1e-8)
+        {
+            mapped.MinerEffort *= 1e9;
+        }
+        // kaspa effort fix end here
 
         const string query = @"UPDATE blocks SET blockheight = @blockheight, status = @status, type = @type,
             reward = @reward, effort = @effort, minereffort = @minereffort, confirmationprogress = @confirmationprogress, hash = @hash WHERE id = @id";

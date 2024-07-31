@@ -75,6 +75,15 @@ public class PoolApiController : ApiControllerBase
                 {
                     var startTime = lastBlockTime.Value;
                     var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, config.Id, startTime, clock.Now));
+
+                    //kaspa effort fix start here
+                    // If the effort is less than 1e-8, multiply it by 1e9
+                    if(poolEffort.HasValue && poolEffort.Value < 1e-8)
+                    {
+                        poolEffort *= 1e9;
+                    }
+                    //kaspa effort fix end here
+
                     if(poolEffort.HasValue)
                         result.PoolEffort = poolEffort.Value;
                 }
@@ -144,6 +153,15 @@ public class PoolApiController : ApiControllerBase
         {
             var startTime = lastBlockTime.Value;
             var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, pool.Id, startTime, clock.Now));
+
+            //kaspa effort fix start here
+            // If the effort is less than 1e-8, multiply it by 1e9
+            if(poolEffort.HasValue && poolEffort.Value < 1e-8)
+            {
+                poolEffort *= 1e9;
+            }
+            //kaspa effort fix end here
+
             if(poolEffort.HasValue)
                 response.Pool.PoolEffort = poolEffort.Value;
         }
@@ -244,6 +262,21 @@ public class PoolApiController : ApiControllerBase
                         block.InfoLink = blockInfobaseUrl.Replace(CoinMetaData.BlockHashPH, block.Hash);
                 }
             }
+
+            //kaspa effort fix start here
+            // If the effort is less than 1e-8, multiply it by 1e9
+            if(block.Effort < 1e-8)
+            {
+                block.Effort *= 1e9;
+            }
+
+            // If the minerEffort is less than 1e-8, multiply it by 1e9
+            if(block.MinerEffort < 1e-8)
+            {
+                block.MinerEffort *= 1e9;
+            }
+            //kaspa effort fix end here
+
         }
 
         return blocks;
@@ -398,6 +431,15 @@ public class PoolApiController : ApiControllerBase
            {
             	var startTime = lastBlockTime.Value;
             	var minerEffort = await cf.Run(con => shareRepo.GetMinerEffortBetweenCreatedAsync(con, pool.Id, address, startTime, clock.Now));
+
+                //kaspa effort fix start here
+                // If the effort is less than 1e-8, multiply it by 1e9
+                if(minerEffort.HasValue && minerEffort.Value < 1e-8)
+                {
+                    minerEffort *= 1e9;
+                }
+                //kaspa effort fix end here
+
             	if(minerEffort.HasValue)
                 	stats.MinerEffort = minerEffort.Value;
            }

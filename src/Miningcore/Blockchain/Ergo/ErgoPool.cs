@@ -117,7 +117,6 @@ public class ErgoPool : PoolBase
                     logger.Info(() => $"[{connection.ConnectionId}] Nicehash detected. Using API supplied difficulty of {nicehashDiff.Value}");
 
                     staticDiff = nicehashDiff;
-                    context.VarDiff = null; // disable vardiff for NiceHash
                 }
 
                 else
@@ -129,10 +128,10 @@ public class ErgoPool : PoolBase
                (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
                    context.VarDiff == null && staticDiff.Value > context.Difficulty))
             {
-                // context.VarDiff = null; // disable vardiff // Do not disable to change static diff to start diff.
+                context.VarDiff = null; // disable vardiff
                 context.SetDifficulty(staticDiff.Value);
 
-                logger.Info(() => $"[{connection.ConnectionId}] Setting starting difficulty of {staticDiff.Value}");
+                logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
             }
 
             // send intial update

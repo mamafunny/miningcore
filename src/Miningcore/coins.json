@@ -157,21 +157,22 @@
         "explorerTxLink": "https://explorer.reaction.network/tx/{0}",
         "explorerAccountLink": "https://explorer.reaction.network/address/{0}"
     },
-    "raptoreum": {
-        "name": "Raptoreum",
-        "canonicalName": "Raptoreum",
-        "symbol": "RTM",
-        "family": "bitcoin",
-        "website": "https://raptoreum.com/",
-        "market": "https://coinmarketcap.com/currencies/raptoreum",
-        "twitter": "https://twitter.com/raptoreum",
-        "telegram": "https://t.me/raptoreum",
-        "discord": "https://discord.com/invite/2T8xG7e",
+	"regus": {
+        "name": "Regus",
+        "symbol": "REG",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "https://regus.app/",
+        "github": "https://github.com/RegusCrypto/Regus",
+        "market": "",
+        "twitter": "https://x.com/RegusCrypto",
+        "telegram": "",
+        "discord": "https://discord.gg/64JxxBGXHZ",
         "coinbaseHasher": {
             "hash": "sha256d"
         },
         "headerHasher": {
-            "hash": "ghostrider"
+            "hash": "sha256d"
         },
         "blockHasher": {
             "hash": "reverse",
@@ -181,16 +182,10 @@
                 }
             ]
         },
-        "hasFounderFee": true,
-        "hasMasterNodes": true,
-        "hasSmartNodes": true,
-        "foundersRewardAddress": [
-            "RTtyQU6DoSuNWetT4WUem5qXP5jNYGpwat"
-        ],
-        "shareMultiplier": 65536,
-        "explorerBlockLink": "https://explorer.raptoreum.com/block-height/$height$",
-        "explorerTxLink": "https://explorer.raptoreum.com/tx/{0}",
-        "explorerAccountLink": "https://explorer.raptoreum.com/address/{0}"
+        "shareMultiplier": 1,
+        "explorerBlockLink": "https://explorer.regus.app/block/$hash$",
+        "explorerTxLink": "https://explorer.regus.app/tx/{0}",
+        "explorerAccountLink": "https://explorer.regus.app/address/{0}"
     },
 	"xenixchain": {
         "name": "XenixChain",

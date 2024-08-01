@@ -85,10 +85,10 @@ public class HandshakePool : PoolBase
                (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
                    context.VarDiff == null && staticDiff.Value > context.Difficulty))
             {
-                context.VarDiff = null; // disable vardiff
+                // context.VarDiff = null; // disable vardiff // Do not disable to change static diff to start diff.
                 context.SetDifficulty(staticDiff.Value);
 
-                logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
+                logger.Info(() => $"[{connection.ConnectionId}] Setting starting difficulty of {staticDiff.Value}");
 
                 await connection.NotifyAsync(BitcoinStratumMethods.SetDifficulty, new object[] { context.Difficulty });
             }

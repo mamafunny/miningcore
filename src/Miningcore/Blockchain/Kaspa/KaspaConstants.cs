@@ -105,6 +105,24 @@ public static class KarlsencoinConstants
     public const long FishHashPlusForkHeightTestnet = 6000000;
 }
 
+public static class ConsensusConstants
+{
+    // List of CSS prefixes: https://github.com/consensus-network/consensusd/blob/master/util/address.go
+    public const string ChainPrefixDevnet = "consensusdev";
+    public const string ChainPrefixSimnet = "consensussim";
+    public const string ChainPrefixTestnet = "consensustest";
+    public const string ChainPrefixMainnet = "consensus";
+}
+
+public static class PugdagConstants
+{
+    // List of PUG prefixes: https://github.com/Pugdag/pugdagd/blob/main/util/address.go
+    public const string ChainPrefixDevnet = "pugdagdev";
+    public const string ChainPrefixSimnet = "pugdagsim";
+    public const string ChainPrefixTestnet = "pugdagtest";
+    public const string ChainPrefixMainnet = "pugdag";
+}
+
 public static class NautilusConstants
 {
     // List of NTL prefixes: https://github.com/Nautilus-Network/nautiliad/blob/master/util/address.go

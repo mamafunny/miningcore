@@ -354,6 +354,26 @@ public class KaspaAddressUtility
         // Build address pattern based on network type and coin symbol
         switch(this.CoinSymbol)
         {
+            case "PUG":
+                this.stringsToBech32Prefixes = new Dictionary<string, KaspaBech32Prefix>
+                {
+                    { PugdagConstants.ChainPrefixMainnet, KaspaBech32Prefix.KaspaMain },
+                    { PugdagConstants.ChainPrefixDevnet, KaspaBech32Prefix.KaspaDev },
+                    { PugdagConstants.ChainPrefixTestnet, KaspaBech32Prefix.KaspaTest },
+                    { PugdagConstants.ChainPrefixSimnet, KaspaBech32Prefix.KaspaSim },
+                };
+                
+                break;
+            case "CSS":
+                this.stringsToBech32Prefixes = new Dictionary<string, KaspaBech32Prefix>
+                {
+                    { ConsensusConstants.ChainPrefixMainnet, KaspaBech32Prefix.KaspaMain },
+                    { ConsensusConstants.ChainPrefixDevnet, KaspaBech32Prefix.KaspaDev },
+                    { ConsensusConstants.ChainPrefixTestnet, KaspaBech32Prefix.KaspaTest },
+                    { ConsensusConstants.ChainPrefixSimnet, KaspaBech32Prefix.KaspaSim },
+                };
+                
+                break;
             case "BGA":
                 this.stringsToBech32Prefixes = new Dictionary<string, KaspaBech32Prefix>
                 {

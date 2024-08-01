@@ -288,6 +288,8 @@ public class KaspaJobManager : JobManagerBase<KaspaJob>
                         customShareHasher = new CShake256(null, Encoding.UTF8.GetBytes(KaspaConstants.CoinbaseHeavyHash));
 
                 return new KarlsencoinJob(customBlockHeaderHasher, customCoinbaseHasher, customShareHasher);
+            case "CSS":
+            case "PUG":
             case "NTL":
             case "NXL":
                 if(customBlockHeaderHasher is not Blake2b)

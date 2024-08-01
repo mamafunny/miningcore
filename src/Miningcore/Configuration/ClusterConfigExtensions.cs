@@ -261,6 +261,8 @@ public partial class KaspaCoinTemplate
             case "KLS":
             case "NTL":
             case "NXL":
+            case "CSS":
+            case "PUG":
                 return "Karlsenhash";
             case "CAS":
             case "HTN":

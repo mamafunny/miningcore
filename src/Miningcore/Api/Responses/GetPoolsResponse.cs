@@ -29,7 +29,10 @@ public class ApiCoinConfig
 
     [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Discord { get; set; }
-
+    
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double shareMultiplier { get; set; }
+    
     [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Telegram { get; set; }
 

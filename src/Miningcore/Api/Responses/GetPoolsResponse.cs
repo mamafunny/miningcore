@@ -62,6 +62,7 @@ public partial class PoolInfo
     public PoolShareBasedBanningConfig ShareBasedBanning { get; set; }
     public int ClientConnectionTimeout { get; set; }
     public int JobRebroadcastTimeout { get; set; }
+    public double shareMultiplier { get; set; }
     public int BlockRefreshInterval { get; set; }
     public float PoolFeePercent { get; set; }
     public string Address { get; set; }

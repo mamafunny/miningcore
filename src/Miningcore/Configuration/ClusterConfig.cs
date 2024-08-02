@@ -134,7 +134,7 @@ public abstract partial class CoinTemplate
     /// ShareMultiplier info
     /// </summary>
      [JsonProperty(Order = -9)]
-    public double ShareMultiplier { get; set; }
+    public string ShareMultiplier { get; set; }
 
     /// <summary>
     /// Telegram Group Link

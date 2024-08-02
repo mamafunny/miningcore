@@ -131,12 +131,6 @@ public abstract partial class CoinTemplate
     public string Discord { get; set; }
 
     /// <summary>
-    /// ShareMultiplier info
-    /// </summary>
-     [JsonProperty(Order = -9)]
-    public string ShareMultiplier { get; set; }
-
-    /// <summary>
     /// Telegram Group Link
     /// </summary>
     [JsonProperty(Order = -9)]

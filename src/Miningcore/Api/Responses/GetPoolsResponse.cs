@@ -29,10 +29,7 @@ public class ApiCoinConfig
 
     [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Discord { get; set; }
-    
-    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public double shareMultiplier { get; set; }
-    
+        
     [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Telegram { get; set; }
 
@@ -65,7 +62,6 @@ public partial class PoolInfo
     public PoolShareBasedBanningConfig ShareBasedBanning { get; set; }
     public int ClientConnectionTimeout { get; set; }
     public int JobRebroadcastTimeout { get; set; }
-    public double shareMultiplier { get; set; }
     public int BlockRefreshInterval { get; set; }
     public float PoolFeePercent { get; set; }
     public string Address { get; set; }

@@ -63,6 +63,7 @@ public partial class PoolInfo
     public int ClientConnectionTimeout { get; set; }
     public int JobRebroadcastTimeout { get; set; }
     public int BlockRefreshInterval { get; set; }
+    public int shareMultiplier { get; set; }
     public float PoolFeePercent { get; set; }
     public string Address { get; set; }
     public string AddressInfoLink { get; set; }

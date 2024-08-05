@@ -89,6 +89,21 @@ public class ShareRepository : IShareRepository
         return con.QuerySingleAsync<double?>(query, new { poolId, miner, start, end });
     }
 
+    public async Task<long> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner)
+    {
+        // Your query to get the total number of confirmed blocks by the miner
+        var sql = @"SELECT COUNT(*) FROM Blocks WHERE PoolId = @PoolId AND miner = @miner AND Status = 'Confirmed'";
+        return await con.ExecuteScalarAsync<long>(sql, new { PoolId = poolId, miner = miner });
+    }
+
+    public async Task<long> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner)
+    {
+        // Your query to get the total number of pending blocks by the miner
+        var sql = @"SELECT COUNT(*) FROM Blocks WHERE PoolId = @PoolId AND miner = @miner AND Status = 'Pending'";
+        return await con.ExecuteScalarAsync<long>(sql, new { PoolId = poolId, miner = miner });
+    }
+
+
     public async Task DeleteSharesByMinerAsync(IDbConnection con, IDbTransaction tx, string poolId, string miner, CancellationToken ct)
     {
         const string query = "DELETE FROM shares WHERE poolid = @poolId AND miner = @miner";

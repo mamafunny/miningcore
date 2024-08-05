@@ -355,58 +355,65 @@ public class PoolApiController : ApiControllerBase
         return response;
     }
 
-    [HttpGet("{poolId}/miners/{address}")]
-    public async Task<Responses.MinerStats> GetMinerInfoAsync(
-        string poolId, string address, [FromQuery] SampleRange perfMode = SampleRange.Day)
+[HttpGet("{poolId}/miners/{address}")]
+public async Task<Responses.MinerStats> GetMinerInfoAsync(
+    string poolId, string address, [FromQuery] SampleRange perfMode = SampleRange.Day)
+{
+    var pool = GetPool(poolId);
+    var ct = HttpContext.RequestAborted;
+
+    if (string.IsNullOrEmpty(address))
+        throw new ApiException("Invalid or missing miner address", HttpStatusCode.NotFound);
+
+    if (pool.Template.Family == CoinFamily.Ethereum)
+        address = address.ToLower();
+
+    var statsResult = await cf.RunTx((con, tx) =>
+        statsRepo.GetMinerStatsAsync(con, tx, pool.Id, address, ct), true, IsolationLevel.Serializable);
+
+    Responses.MinerStats stats = null;
+
+    if (statsResult != null)
     {
-        var pool = GetPool(poolId);
-        var ct = HttpContext.RequestAborted;
+        stats = mapper.Map<Responses.MinerStats>(statsResult);
 
-        if(string.IsNullOrEmpty(address))
-            throw new ApiException("Invalid or missing miner address", HttpStatusCode.NotFound);
+        // pre-multiply pending shares to cause less confusion with users
+        if (pool.Template.Family == CoinFamily.Bitcoin)
+            stats.PendingShares *= pool.Template.As<BitcoinTemplate>().ShareMultiplier;
 
-        if(pool.Template.Family == CoinFamily.Ethereum)
-            address = address.ToLower();
-
-        var statsResult = await cf.RunTx((con, tx) =>
-            statsRepo.GetMinerStatsAsync(con, tx, pool.Id, address, ct), true, IsolationLevel.Serializable);
-
-        Responses.MinerStats stats = null;
-
-        if(statsResult != null)
+        // optional fields
+        if (statsResult.LastPayment != null)
         {
-            stats = mapper.Map<Responses.MinerStats>(statsResult);
+            // Set timestamp of last payment
+            stats.LastPayment = statsResult.LastPayment.Created;
 
-            // pre-multiply pending shares to cause less confusion with users
-            if(pool.Template.Family == CoinFamily.Bitcoin)
-                stats.PendingShares *= pool.Template.As<BitcoinTemplate>().ShareMultiplier;
-
-            // optional fields
-            if(statsResult.LastPayment != null)
-            {
-                // Set timestamp of last payment
-                stats.LastPayment = statsResult.LastPayment.Created;
-
-                // Compute info link
-                var baseUrl = pool.Template.ExplorerTxLink;
-                if(!string.IsNullOrEmpty(baseUrl))
-                    stats.LastPaymentLink = string.Format(baseUrl, statsResult.LastPayment.TransactionConfirmationData);
-            }
-
-            var lastBlockTime = await cf.Run(con => blocksRepo.GetLastMinerBlockTimeAsync(con, pool.Id, address));
-            if(lastBlockTime.HasValue)
-           {
-            	var startTime = lastBlockTime.Value;
-            	var minerEffort = await cf.Run(con => shareRepo.GetMinerEffortBetweenCreatedAsync(con, pool.Id, address, startTime, clock.Now));
-            	if(minerEffort.HasValue)
-                	stats.MinerEffort = minerEffort.Value;
-           }
-
-            stats.PerformanceSamples = await GetMinerPerformanceInternal(perfMode, pool, address, ct);
+            // Compute info link
+            var baseUrl = pool.Template.ExplorerTxLink;
+            if (!string.IsNullOrEmpty(baseUrl))
+                stats.LastPaymentLink = string.Format(baseUrl, statsResult.LastPayment.TransactionConfirmationData);
         }
 
-        return stats;
+        var lastBlockTime = await cf.Run(con => blocksRepo.GetLastMinerBlockTimeAsync(con, pool.Id, address));
+        if (lastBlockTime.HasValue)
+        {
+            var startTime = lastBlockTime.Value;
+            var minerEffort = await cf.Run(con => shareRepo.GetMinerEffortBetweenCreatedAsync(con, pool.Id, address, startTime, clock.Now));
+            if (minerEffort.HasValue)
+                stats.MinerEffort = minerEffort.Value;
+        }
+
+        stats.PerformanceSamples = await GetMinerPerformanceInternal(perfMode, pool, address, ct);
+
+        // Add total confirmed and pending blocks
+        var totalConfirmedBlocks = await cf.Run(con => statsRepo.GetTotalConfirmedBlocksAsync(con, pool.Id, address));
+        var totalPendingBlocks = await cf.Run(con => statsRepo.GetTotalPendingBlocksAsync(con, pool.Id, address));
+        stats.TotalConfirmedBlocks = totalConfirmedBlocks;
+        stats.TotalPendingBlocks = totalPendingBlocks;
     }
+
+    return stats;
+}
+
 
     [HttpGet("{poolId}/miners/{address}/blocks")]
     public async Task<Responses.Block[]> PageMinerBlocksAsync(

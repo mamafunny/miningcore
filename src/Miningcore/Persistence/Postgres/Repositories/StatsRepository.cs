@@ -355,15 +355,17 @@ public class StatsRepository : IStatsRepository
         return con.ExecuteAsync(new CommandDefinition(query, new { date }, cancellationToken: ct));
     }
 
-        public async Task<long> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner)
+    public Task<uint> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, CancellationToken ct)
     {
-        var sql = @"SELECT COUNT(*) FROM Blocks WHERE PoolId = @PoolId AND miner = @miner AND Status = 'Confirmed'";
-        return await con.ExecuteScalarAsync<long>(sql, new { PoolId = poolId, miner = miner });
+        const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND miner = @miner AND status = 'confirmed'";
+
+        return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
     }
 
-    public async Task<long> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner)
+    public Task<uint> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, CancellationToken ct)
     {
-        var sql = @"SELECT COUNT(*) FROM Blocks WHERE PoolId = @PoolId AND miner = @miner AND Status = 'Pending'";
-        return await con.ExecuteScalarAsync<long>(sql, new { PoolId = poolId, miner = miner });
+        const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND miner = @miner AND status = 'pending'";
+
+        return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
     }
 }

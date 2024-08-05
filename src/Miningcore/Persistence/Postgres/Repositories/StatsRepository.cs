@@ -354,4 +354,16 @@ public class StatsRepository : IStatsRepository
 
         return con.ExecuteAsync(new CommandDefinition(query, new { date }, cancellationToken: ct));
     }
+
+        public async Task<long> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner)
+    {
+        var sql = @"SELECT COUNT(*) FROM Blocks WHERE PoolId = @PoolId AND miner = @miner AND Status = 'Confirmed'";
+        return await con.ExecuteScalarAsync<long>(sql, new { PoolId = poolId, miner = miner });
+    }
+
+    public async Task<long> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner)
+    {
+        var sql = @"SELECT COUNT(*) FROM Blocks WHERE PoolId = @PoolId AND miner = @miner AND Status = 'Pending'";
+        return await con.ExecuteScalarAsync<long>(sql, new { PoolId = poolId, miner = miner });
+    }
 }

@@ -410,8 +410,8 @@ public class PoolApiController : ApiControllerBase
             stats.PerformanceSamples = await GetMinerPerformanceInternal(perfMode, pool, address, ct);
 
             // Add total confirmed and pending blocks
-            var totalConfirmedBlocks = await cf.Run(con => statsRepo.GetTotalConfirmedBlocksAsync(con, pool.Id, address));
-            var totalPendingBlocks = await cf.Run(con => statsRepo.GetTotalPendingBlocksAsync(con, pool.Id, address));
+            var totalConfirmedBlocks = await cf.Run(con => statsRepo.GetMinerTotalConfirmedBlocksAsync(con, pool.Id, address, ct));
+            var totalPendingBlocks = await cf.Run(con => statsRepo.GetMinerTotalPendingBlocksAsync(con, pool.Id, address, ct));
             stats.TotalConfirmedBlocks = totalConfirmedBlocks;
             stats.TotalPendingBlocks = totalPendingBlocks;
         }

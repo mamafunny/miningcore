@@ -27,6 +27,6 @@ public interface IStatsRepository
 
     Task<int> DeletePoolStatsBeforeAsync(IDbConnection con, DateTime date, CancellationToken ct);
     Task<int> DeleteMinerStatsBeforeAsync(IDbConnection con, DateTime date, CancellationToken ct);
-    Task<long> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner);
-    Task<long> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner);
+    Task<uint> GetMinerTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner, CancellationToken ct);
+    Task<uint> GetMinerTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner, CancellationToken ct);
 }

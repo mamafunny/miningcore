@@ -355,15 +355,17 @@ public class StatsRepository : IStatsRepository
         return con.ExecuteAsync(new CommandDefinition(query, new { date }, cancellationToken: ct));
     }
 
-        public async Task<long> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner)
+    public Task<uint> GetMinerTotalConfirmedBlocksAsync(IDbConnection con, string poolId, string miner, CancellationToken ct)
     {
         const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND miner = @miner AND status = 'confirmed'";
-        return await con.ExecuteScalarAsync<long>(query, new { PoolId = poolId, miner = miner });
+
+        return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
     }
 
-    public async Task<long> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner)
+    public Task<uint> GetMinerTotalPendingBlocksAsync(IDbConnection con, string poolId, string miner, CancellationToken ct)
     {
         const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND miner = @miner AND status = 'pending'";
-        return await con.ExecuteScalarAsync<long>(query, new { PoolId = poolId, miner = miner });
+
+        return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
     }
 }

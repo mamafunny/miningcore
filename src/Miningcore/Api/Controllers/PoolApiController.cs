@@ -49,48 +49,51 @@ public class PoolApiController : ApiControllerBase
 
     #region Actions
 
-    [HttpGet]
-    public async Task<GetPoolsResponse> Get(CancellationToken ct, [FromQuery] uint topMinersRange = 24)
+ [HttpGet]
+public async Task<GetPoolsResponse> Get(CancellationToken ct, [FromQuery] uint topMinersRange = 24)
+{
+    var response = new GetPoolsResponse
     {
-        var response = new GetPoolsResponse
+        Pools = await Task.WhenAll(clusterConfig.Pools.Where(x => x.Enabled).Select(async config =>
         {
-            Pools = await Task.WhenAll(clusterConfig.Pools.Where(x => x.Enabled).Select(async config =>
+            // load stats
+            var stats = await cf.Run(con => statsRepo.GetLastPoolStatsAsync(con, config.Id, ct));
+
+            // get pool
+            pools.TryGetValue(config.Id, out var pool);
+
+            // map
+            var result = config.ToPoolInfo(mapper, stats, pool);
+
+            // enrich
+            result.TotalPaid = await cf.Run(con => statsRepo.GetTotalPoolPaymentsAsync(con, config.Id, ct));
+            result.TotalBlocks = await cf.Run(con => blocksRepo.GetPoolBlockCountAsync(con, config.Id, ct));
+            result.TotalConfirmedBlocks = await cf.Run(con => blocksRepo.GetTotalConfirmedBlocksAsync(con, config.Id, ct));
+            result.TotalPendingBlocks = await cf.Run(con => blocksRepo.GetTotalPendingBlocksAsync(con, config.Id, ct));
+            var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, config.Id));
+            result.LastPoolBlockTime = lastBlockTime;
+
+            if (lastBlockTime.HasValue)
             {
-                // load stats
-                var stats = await cf.Run(con => statsRepo.GetLastPoolStatsAsync(con, config.Id, ct));
+                var startTime = lastBlockTime.Value;
+                var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, config.Id, pool.ShareMultiplier, startTime, clock.Now));
+                if (poolEffort.HasValue)
+                    result.PoolEffort = poolEffort.Value;
+            }
 
-                // get pool
-                pools.TryGetValue(config.Id, out var pool);
+            var from = clock.Now.AddHours(-topMinersRange);
 
-                // map
-                var result = config.ToPoolInfo(mapper, stats, pool);
+            var minersByHashrate = await cf.Run(con => statsRepo.PagePoolMinersByHashrateAsync(con, config.Id, from, 0, 15, ct));
 
-                // enrich
-                result.TotalPaid = await cf.Run(con => statsRepo.GetTotalPoolPaymentsAsync(con, config.Id, ct));
-                result.TotalBlocks = await cf.Run(con => blocksRepo.GetPoolBlockCountAsync(con, config.Id, ct));
-                var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, config.Id));
-                result.LastPoolBlockTime = lastBlockTime;
+            result.TopMiners = minersByHashrate.Select(mapper.Map<MinerPerformanceStats>).ToArray();
 
-                if(lastBlockTime.HasValue)
-                {
-                    var startTime = lastBlockTime.Value;
-                    var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, config.Id, pool.ShareMultiplier, startTime, clock.Now));
-                    if(poolEffort.HasValue)
-                        result.PoolEffort = poolEffort.Value;
-                }
+            return result;
+        }).ToArray())
+    };
 
-                var from = clock.Now.AddHours(-topMinersRange);
-
-                var minersByHashrate = await cf.Run(con => statsRepo.PagePoolMinersByHashrateAsync(con, config.Id, from, 0, 15, ct));
-
-                result.TopMiners = minersByHashrate.Select(mapper.Map<MinerPerformanceStats>).ToArray();
-
-                return result;
-            }).ToArray())
-        };
-
-        return response;
-    }
+    return response;
+}
+}
 
     [HttpGet("/api/help")]
     public ActionResult GetHelp()
@@ -118,44 +121,47 @@ public class PoolApiController : ApiControllerBase
         return Content("👍");
     }
 
-    [HttpGet("{poolId}")]
-    public async Task<GetPoolResponse> GetPoolInfoAsync(string poolId, CancellationToken ct, [FromQuery] uint topMinersRange = 24)
+[HttpGet("{poolId}")]
+public async Task<GetPoolResponse> GetPoolInfoAsync(string poolId, CancellationToken ct, [FromQuery] uint topMinersRange = 24)
+{
+    var pool = GetPool(poolId);
+
+    // load stats
+    var stats = await cf.Run(con => statsRepo.GetLastPoolStatsAsync(con, pool.Id, ct));
+
+    // get pool
+    pools.TryGetValue(pool.Id, out var poolInstance);
+
+    var response = new GetPoolResponse
     {
-        var pool = GetPool(poolId);
+        Pool = pool.ToPoolInfo(mapper, stats, poolInstance)
+    };
 
-        // load stats
-        var stats = await cf.Run(con => statsRepo.GetLastPoolStatsAsync(con, pool.Id, ct));
+    // enrich
+    response.Pool.TotalPaid = await cf.Run(con => statsRepo.GetTotalPoolPaymentsAsync(con, pool.Id, ct));
+    response.Pool.TotalBlocks = await cf.Run(con => blocksRepo.GetPoolBlockCountAsync(con, pool.Id, ct));
+    response.Pool.TotalConfirmedBlocks = await cf.Run(con => blocksRepo.GetTotalConfirmedBlocksAsync(con, pool.Id, ct));
+    response.Pool.TotalPendingBlocks = await cf.Run(con => blocksRepo.GetTotalPendingBlocksAsync(con, pool.Id, ct));
+    var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, pool.Id));
+    response.Pool.LastPoolBlockTime = lastBlockTime;
 
-        // get pool
-        pools.TryGetValue(pool.Id, out var poolInstance);
-
-        var response = new GetPoolResponse
-        {
-            Pool = pool.ToPoolInfo(mapper, stats, poolInstance)
-        };
-
-        // enrich
-        response.Pool.TotalPaid = await cf.Run(con => statsRepo.GetTotalPoolPaymentsAsync(con, pool.Id, ct));
-        response.Pool.TotalBlocks = await cf.Run(con => blocksRepo.GetPoolBlockCountAsync(con, pool.Id, ct));
-        var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, pool.Id));
-        response.Pool.LastPoolBlockTime = lastBlockTime;
-
-        if(lastBlockTime.HasValue)
-        {
-            var startTime = lastBlockTime.Value;
-            var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, pool.Id, poolInstance.ShareMultiplier, startTime, clock.Now));
-            if(poolEffort.HasValue)
-                response.Pool.PoolEffort = poolEffort.Value;
-        }
-
-        var from = clock.Now.AddHours(-topMinersRange);
-
-        response.Pool.TopMiners = (await cf.Run(con => statsRepo.PagePoolMinersByHashrateAsync(con, pool.Id, from, 0, 15, ct)))
-            .Select(mapper.Map<MinerPerformanceStats>)
-            .ToArray();
-
-        return response;
+    if (lastBlockTime.HasValue)
+    {
+        var startTime = lastBlockTime.Value;
+        var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, pool.Id, poolInstance.ShareMultiplier, startTime, clock.Now));
+        if (poolEffort.HasValue)
+            response.Pool.PoolEffort = poolEffort.Value;
     }
+
+    var from = clock.Now.AddHours(-topMinersRange);
+
+    response.Pool.TopMiners = (await cf.Run(con => statsRepo.PagePoolMinersByHashrateAsync(con, pool.Id, from, 0, 15, ct)))
+        .Select(mapper.Map<MinerPerformanceStats>)
+        .ToArray();
+
+    return response;
+}
+
 
     [HttpGet("{poolId}/performance")]
     public async Task<GetPoolStatsResponse> GetPoolPerformanceAsync(string poolId,

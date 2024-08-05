@@ -152,6 +152,20 @@ public class BlockRepository : IBlockRepository
 
         return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
     }
+
+    public Task<uint> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, CancellationToken ct)
+{
+    const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND status = 'confirmed'";
+
+    return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
+}
+
+public Task<uint> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, CancellationToken ct)
+{
+    const string query = @"SELECT COUNT(*) FROM blocks WHERE poolid = @poolId AND status = 'pending'";
+
+    return con.ExecuteScalarAsync<uint>(new CommandDefinition(query, new { poolId }, cancellationToken: ct));
+}
     
     public Task<uint> GetMinerBlockCountAsync(IDbConnection con, string poolId, string address, CancellationToken ct)
     {

@@ -74,6 +74,8 @@ public partial class PoolInfo
     public MinerPerformanceStats[] TopMiners { get; set; }
     public decimal TotalPaid { get; set; }
     public uint TotalBlocks { get; set; }
+    public uint TotalConfirmedBlocks { get; set; }
+    public uint TotalPendingBlocks { get; set; }
     public DateTime? LastPoolBlockTime { get; set; }
     public double PoolEffort { get; set; }
 }

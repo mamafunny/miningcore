@@ -93,7 +93,6 @@ public async Task<GetPoolsResponse> Get(CancellationToken ct, [FromQuery] uint t
 
     return response;
 }
-}
 
     [HttpGet("/api/help")]
     public ActionResult GetHelp()
@@ -816,4 +815,4 @@ public async Task<Responses.MinerStats> GetMinerInfoAsync(
         var result = mapper.Map<Responses.WorkerPerformanceStatsContainer[]>(stats);
         return result;
     }
-}
+

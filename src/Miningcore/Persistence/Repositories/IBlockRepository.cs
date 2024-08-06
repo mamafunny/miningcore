@@ -19,7 +19,7 @@ public interface IBlockRepository
     Task<uint> GetPoolBlockCountAsync(IDbConnection con, string poolId, CancellationToken ct);
     Task<uint> GetTotalConfirmedBlocksAsync(IDbConnection con, string poolId, CancellationToken ct);
     Task<uint> GetTotalPendingBlocksAsync(IDbConnection con, string poolId, CancellationToken ct);
-    Task<uint> GetLastConfirmedBlockRewardAsync(IDbConnection con, string poolId, CancellationToken ct);
+    Task<decimal> GetLastConfirmedBlockRewardAsync(IDbConnection con, string poolId, CancellationToken ct);    
     Task<DateTime?> GetLastMinerBlockTimeAsync(IDbConnection con, string poolId, string address);
     Task<uint> GetMinerBlockCountAsync(IDbConnection con, string poolId, string address, CancellationToken ct);
     Task<DateTime?> GetLastPoolBlockTimeAsync(IDbConnection con, string poolId);

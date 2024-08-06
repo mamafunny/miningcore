@@ -76,7 +76,7 @@ public partial class PoolInfo
     public uint TotalBlocks { get; set; }
     public uint TotalConfirmedBlocks { get; set; }
     public uint TotalPendingBlocks { get; set; }
-    public uint BlockReward { get; set; }  // BlockReward as uint
+    public decimal BlockReward { get; set; }  // BlockReward as decimal
     public DateTime? LastPoolBlockTime { get; set; }
     public double PoolEffort { get; set; }
 }

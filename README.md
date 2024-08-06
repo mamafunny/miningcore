@@ -231,12 +231,9 @@ Once again, do not run a production pool on Windows! This is not a supported con
 
 To support this project you can become a [sponsor]( https://github.com/sponsors/megabrr ) or send a donation to the following accounts:
 
-* ETH:  `0xbC059e88A4dD11c2E882Fc6B83F8Ec12E4CCCFad`
-* BTC:  `16xvkGfG9nrJSKKo5nGWphP8w4hr2ZzVuw`
-* LTC:  `LLs76baYT7iMqQhizxtBC96Cy48iX3Eh1p`
-* DOGE: `DFuvDSFh4N3SiXGDnye2Vbc8kqvMHbyQE1`
-* KAS:  `kaspa:qpmf0wyu7c5z4l82ax9cfc5ughwk2f9lgu8uckkqrrpjqkxuk7yrga5nntvgn`
-* CCX:  `ccx7S4B3gBeH1SGWCfqZp3NM7Vavg7H3S8ovJn8fU4bwC4vU7ChWfHtbNzifhrpbJ74bMDxj4KZFTcznTfsucCEg1Kgv7zbNgs`
-* FIRO: `a5AsoTSkfPHQ3SUmR6binG1XW7oQQoFNU1`
-* ERGO: `9gYyuZzaSw3TiCtUkSRuS3XVDUv41EFs3dtNCFGqiEwHqpb7gkF`
-* XMR:  `483zaHtMRfM7rw1dXgebhWaRR8QLgAF6w4BomAV319FVVHfdbYTLVuBRc4pQgRAnRpfy6CXvvwngK4Lo3mRKE29RRx3Jb5c`
+* ETH:  `0x1C3E574C0B769Ba2a07851a076857a8361A183C0`
+* BTC:  `bc1q9tle2mfctv57y9rx2f4jwslvhega5vl9ycmdyg`
+* LTC:  `ltc1qyxdksdynvl6jhe0hcacmgwyujzy2s40j7lhpfc`
+* DOGE: `DSEBxncdmmAUmRDdrFKJMWn174igDk7s7c`
+* RVN:  `RCSx6HXpqxssyfdtocY585KAJiwXHW5jVE`
+* XMR:  `8AHUJk193Wh3Q7ALSFESyzQ7PNhWqheEyP3rDALcj8Ps2rAqnCkifK3FAgfyv7KGfVAiBwzbeq36ZEjBZvwRZE3G5JD4y6w`

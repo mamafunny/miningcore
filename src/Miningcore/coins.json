@@ -3928,6 +3928,34 @@
         "explorerTxLink": "https://groestlsight.groestlcoin.org/tx/{0}",
         "explorerAccountLink": "https://groestlsight.groestlcoin.org/address/{0}"
     },
+    "hellar": {
+        "name": "Hellar",
+        "symbol": "HEL",
+        "family": "bitcoin",
+        "website": "https://hellar.io/",
+        "market": "",
+        "twitter": "https://twitter.com/HellarCore",
+        "telegram": "",
+        "discord": "https://discord.gg/U7W5WXxzfT",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "x11gost"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "x11gost"
+                }
+            ]
+        },
+        "hasMasterNodes": true,
+        "explorerBlockLink": "http://chain.hellar.io/block/$hash$",
+        "explorerTxLink": "http://chain.hellar.io/tx/{0}",
+        "explorerAccountLink": "http://chain.hellar.io/address/{0}"
+    },
     "help-the-homeless": {
         "name": "Help The Homeless",
         "canonicalName":  "",

@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "skein.h"
 #include "skein2.h"
 #include "x11.h"
+#include "x11gost.h"
 #include "groestl.h"
 #include "blake.h"
 #include "fugue.h"
@@ -140,6 +141,11 @@ extern "C" MODULE_API void phi_export(const char* input, char* output, uint32_t 
 extern "C" MODULE_API void x11_export(const char* input, char* output, uint32_t input_len)
 {
 	x11_hash(input, output, input_len);
+}
+
+extern "C" MODULE_API void x11gost_export(const char *input, char *output, uint32_t input_len)
+{
+	x11gost_hash(input, output, input_len);
 }
 
 extern "C" MODULE_API void x13_export(const char* input, char* output, uint32_t input_len)

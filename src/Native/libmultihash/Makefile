@@ -13,7 +13,7 @@ OBJECTS = allium.o aurum.o bcrypt.o blake.o c11.o dcrypt.o fresh.o lane.o megabt
 	sha3/sph_haval.o sha3/sph_sha2.o sha3/sph_sha2big.o sha3/sm3.o sha3/panama.o \
 	sha3/extra.o sha3/gost_streebog.o sha3/sph_tiger.o sha3/SWIFFTX.o KeccakP-800-reference.o \
 	shake/cshake.o shake/keccak.o shake/shake.o \
-	shavite3.o skein.o skein2.o x11.o x13.o x15.o x17.o x16r.o x16rv2.o x16s.o x21s.o x22i.o \
+	shavite3.o skein.o skein2.o x11.o x11gost.o x13.o x15.o x17.o x16r.o x16rv2.o x16s.o x21s.o x22i.o \
 	blake2/sse/blake2s.o blake2/sse/blake2b.o \
 	blake3/blake3.o blake3/blake3_dispatch.o blake3/blake3_portable.o \
 	blake3/blake3_sse2_x86-64_unix.o blake3/blake3_sse41_x86-64_unix.o blake3/blake3_avx2_x86-64_unix.o \

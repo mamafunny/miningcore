@@ -38,6 +38,7 @@ export HAVE_FEATURE="$HAVE_AES $HAVE_SSE2 $HAVE_SSE3 $HAVE_SSSE3 $HAVE_PCLMUL $H
 (cd ../Native/libkawpow && make clean && make) && mv ../Native/libkawpow/libkawpow.so "$OutDir"
 (cd ../Native/libmeowpow && make clean && make) && mv ../Native/libmeowpow/libmeowpow.so "$OutDir"
 (cd ../Native/libsccpow && make clean && make) && mv ../Native/libsccpow/libsccpow.so "$OutDir"
+(cd ../Native/libmeraki && make clean && make) && mv ../Native/libmeraki/libmeraki.so "$OutDir"
 
 ((cd /tmp && rm -rf secp256k1 && git clone https://github.com/bitcoin-ABC/secp256k1 && cd secp256k1 && git checkout 04fabb44590c10a19e35f044d11eb5058aac65b2 && mkdir build && cd build && cmake -GNinja .. -DCMAKE_C_FLAGS=-fPIC -DSECP256K1_ENABLE_MODULE_RECOVERY=OFF -DSECP256K1_ENABLE_COVERAGE=OFF -DSECP256K1_ENABLE_MODULE_SCHNORR=ON && ninja) && (cd ../Native/libnexapow && cp /tmp/secp256k1/build/libsecp256k1.a . && make clean && make) && mv ../Native/libnexapow/libnexapow.so "$OutDir")
 ((cd /tmp && rm -rf RandomX && git clone https://github.com/tevador/RandomX && cd RandomX && git checkout tags/v1.1.10 && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomx && cp /tmp/RandomX/build/librandomx.a . && make clean && make) && mv ../Native/librandomx/librandomx.so "$OutDir")

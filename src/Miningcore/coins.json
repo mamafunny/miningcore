@@ -1151,10 +1151,39 @@
         "explorerAccountLink": "https://btnscan.com/address/{0}",
         "ethasher": "ethash"
     },
-    "xcoin": {
-        "name": "Xcoin",
-        "canonicalName":  "",
-        "symbol": "XC",
+    "telestai": {
+        "name": "Telestai",
+        "symbol": "TLS",
+        "family": "progpow",
+        "progpower": "meraki",
+        "website": "https://www.telestai.io/",
+        "market": "",
+        "twitter": "https://x.com/Telestai_io",
+        "telegram": "",
+        "discord": "https://discord.gg/VmFXfHnZE5",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "hasFounderFee": true,
+        "shareMultiplier": 1,
+        "explorerBlockLink": "https://telestai.cryptoscope.io/block/?blockhash=$hash$",
+        "explorerTxLink": "https://telestai.cryptoscope.io/tx/?txid={0}",
+        "explorerAccountLink": "https://telestai.cryptoscope.io/address/?address={0}"
+    },
+    "joss": {
+        "name": "Joss Network",
+        "symbol": "JOSS",
         "family": "bitcoin",
         "website": "xcoincore.org/",
         "github":  "",

@@ -2,7 +2,7 @@
 [![.NET](https://github.com/megabrr/miningcore/actions/workflows/dotnet.yml/badge.svg)](https://github.com/megabrr/miningcore/actions/workflows/dotnet.yml)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-<img src="https://github.com/megabrr/miningcore/raw/master/logo.png" width="150">
+<img src="https://raw.githubusercontent.com/megabrr/miningcore/dev/logo.png" width="150">
 
 ### Features
 

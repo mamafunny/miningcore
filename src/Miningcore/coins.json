@@ -223,5 +223,36 @@
         "explorerBlockLink": "https://explorer.xenixchain.com/block/$hash$",
         "explorerTxLink": "https://explorer.xenixchain.com/tx/{0}",
         "explorerAccountLink": "https://explorer.xenixchain.com/address/{0}"
+    },
+    "clore": {
+        "name": "Clore",
+        "symbol": "CLORE",
+        "family": "progpow",
+        "website": "https://blockchain.clore.ai/",
+        "github": "https://gitlab.com/cloreai-public/blockchain",
+        "market": "https://coinmarketcap.com/currencies/clore-ai/",
+        "twitter": "https://twitter.com/clore_ai",
+        "telegram": "https://t.me/clorechat",
+        "discord": "https://discord.com/invite/7sAEVGza8w",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "hasCommunityAddress": true,
+        "shareMultiplier": 1,
+        "progpower": "kawpow",
+        "explorerBlockLink": "https://exploreblockchain.clore.ai/block/$hash$",
+        "explorerTxLink": "https://exploreblockchain.clore.ai/tx/{0}",
+        "explorerAccountLink": "https://exploreblockchain.clore.ai/address/{0}"
     }
 }

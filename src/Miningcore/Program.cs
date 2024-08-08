@@ -620,23 +620,28 @@ public class Program : BackgroundService
     private static void Logo()
     {
         Console.WriteLine(@"
- ███╗   ███╗██╗███╗   ██╗██╗███╗   ██╗ ██████╗  ██████╗ ██████╗ ██████╗ ███████╗
- ████╗ ████║██║████╗  ██║██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗██╔══██╗██╔════╝
- ██╔████╔██║██║██╔██╗ ██║██║██╔██╗ ██║██║  ███╗██║     ██║   ██║██████╔╝█████╗
- ██║╚██╔╝██║██║██║╚██╗██║██║██║╚██╗██║██║   ██║██║     ██║   ██║██╔══██╗██╔══╝
- ██║ ╚═╝ ██║██║██║ ╚████║██║██║ ╚████║╚██████╔╝╚██████╗╚██████╔╝██║  ██║███████╗
+███████╗ ██████╗ ███╗   ███╗███████╗ ██████╗ ██╗   ██╗██╗   ██╗                
+██╔════╝██╔═══██╗████╗ ████║██╔════╝██╔════╝ ██║   ██║╚██╗ ██╔╝                
+███████╗██║   ██║██╔████╔██║█████╗  ██║  ███╗██║   ██║ ╚████╔╝                 
+╚════██║██║   ██║██║╚██╔╝██║██╔══╝  ██║   ██║██║   ██║  ╚██╔╝                  
+███████║╚██████╔╝██║ ╚═╝ ██║███████╗╚██████╔╝╚██████╔╝   ██║                   
+╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝                   
+                                                                               
+███╗   ███╗██╗███╗   ██╗██╗███╗   ██╗ ██████╗  ██████╗ ██████╗ ██████╗ ███████╗
+████╗ ████║██║████╗  ██║██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗██╔══██╗██╔════╝
+██╔████╔██║██║██╔██╗ ██║██║██╔██╗ ██║██║  ███╗██║     ██║   ██║██████╔╝█████╗  
+██║╚██╔╝██║██║██║╚██╗██║██║██║╚██╗██║██║   ██║██║     ██║   ██║██╔══██╗██╔══╝  
+██║ ╚═╝ ██║██║██║ ╚████║██║██║ ╚████║╚██████╔╝╚██████╗╚██████╔╝██║  ██║███████╗
+╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝                                                                               
 ");
-        Console.WriteLine(" https://github.com/blackmennewstyle/miningcore\n");
+        Console.WriteLine(" https://github.com/megabrr/miningcore\n");
         Console.WriteLine(" Donate to one of these addresses to support the project:\n");
-        Console.WriteLine(" ETH  - 0xbC059e88A4dD11c2E882Fc6B83F8Ec12E4CCCFad");
-        Console.WriteLine(" BTC  - 16xvkGfG9nrJSKKo5nGWphP8w4hr2ZzVuw");
-        Console.WriteLine(" LTC  - LLs76baYT7iMqQhizxtBC96Cy48iX3Eh1p");
-        Console.WriteLine(" DOGE - DFuvDSFh4N3SiXGDnye2Vbc8kqvMHbyQE1");
-        Console.WriteLine(" KAS  - kaspa:qpmf0wyu7c5z4l82ax9cfc5ughwk2f9lgu8uckkqrrpjqkxuk7yrga5nntvgn");
-        Console.WriteLine(" CCX  - ccx7S4B3gBeH1SGWCfqZp3NM7Vavg7H3S8ovJn8fU4bwC4vU7ChWfHtbNzifhrpbJ74bMDxj4KZFTcznTfsucCEg1Kgv7zbNgs");
-        Console.WriteLine(" FIRO - a5AsoTSkfPHQ3SUmR6binG1XW7oQQoFNU1");
-        Console.WriteLine(" ERGO - 9gYyuZzaSw3TiCtUkSRuS3XVDUv41EFs3dtNCFGqiEwHqpb7gkF");
-        Console.WriteLine(" XMR  - 483zaHtMRfM7rw1dXgebhWaRR8QLgAF6w4BomAV319FVVHfdbYTLVuBRc4pQgRAnRpfy6CXvvwngK4Lo3mRKE29RRx3Jb5c");
+        Console.WriteLine(" ETH  - 0x1C3E574C0B769Ba2a07851a076857a8361A183C0");
+        Console.WriteLine(" BTC  - bc1q9tle2mfctv57y9rx2f4jwslvhega5vl9ycmdyg");
+        Console.WriteLine(" LTC  - ltc1qyxdksdynvl6jhe0hcacmgwyujzy2s40j7lhpfc");
+        Console.WriteLine(" DOGE - DSEBxncdmmAUmRDdrFKJMWn174igDk7s7c");
+        Console.WriteLine(" RVN  - RCSx6HXpqxssyfdtocY585KAJiwXHW5jVE");
+        Console.WriteLine(" XMR  - 8AHUJk193Wh3Q7ALSFESyzQ7PNhWqheEyP3rDALcj8Ps2rAqnCkifK3FAgfyv7KGfVAiBwzbeq36ZEjBZvwRZE3G5JD4y6w");
         Console.WriteLine();
     }
 

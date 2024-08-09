@@ -228,12 +228,12 @@
         "name": "Clore",
         "symbol": "CLORE",
         "family": "progpow",
-        "website": "https://blockchain.clore.ai/",
+        "website": "https://clore.ai/",
         "github": "https://gitlab.com/cloreai-public/blockchain",
         "market": "https://coinmarketcap.com/currencies/clore-ai/",
         "twitter": "https://twitter.com/clore_ai",
         "telegram": "https://t.me/clorechat",
-        "discord": "https://discord.com/invite/7sAEVGza8w",
+        "discord": "https://discord.gg/cloreai",
         "coinbaseHasher": {
             "hash": "sha256d"
         },

@@ -23,4 +23,6 @@ public class MinerStats
     public DateTime? LastMinerBlockTime { get; set; }
     public WorkerPerformanceStatsContainer Performance { get; set; }
     public MinerWorkerPerformanceStats[] PerformanceStats { get; init; }
+    public long TotalConfirmedBlocks { get; set; }
+    public long TotalPendingBlocks { get; set; }
 }

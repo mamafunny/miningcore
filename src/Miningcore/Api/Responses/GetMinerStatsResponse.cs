@@ -30,4 +30,6 @@ public class MinerStats
     public string LastPaymentLink { get; set; }
     public WorkerPerformanceStatsContainer Performance { get; set; }
     public WorkerPerformanceStatsContainer[] PerformanceSamples { get; set; }
+    public long TotalConfirmedBlocks { get; set; }
+    public long TotalPendingBlocks { get; set; }
 }

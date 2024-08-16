@@ -261,11 +261,14 @@ public class BitcoinJob
         if(coin.HasFoundation)
             rewardToPool = CreateFoundationOutputs(tx, rewardToPool);
 
+        if(coin.HasCommunity)
+            rewardToPool = CreateCommunityOutputs(tx, rewardToPool);
+
         if(coin.HasDataMining)
             rewardToPool = CreateDataMiningOutputs(tx, rewardToPool);
 
-        if(coin.HasCommunity)
-            rewardToPool = CreateCommunityOutputs(tx, rewardToPool);
+        if(coin.HasDeveloper)
+            rewardToPool = CreateDeveloperOutputs(tx, rewardToPool);
 
         // Remaining amount goes to pool
         tx.Outputs.Add(rewardToPool, poolAddressDestination);
@@ -540,7 +543,7 @@ public class BitcoinJob
                         var payeeReward = Community.Amount;
 
                         tx.Outputs.Add(payeeReward, payeeAddress);
-                        reward -= payeeReward;
+                        //reward -= payeeReward;
                     }
                 }
             }
@@ -575,7 +578,7 @@ public class BitcoinJob
                         var payeeReward = DataMining.Amount;
 
                         tx.Outputs.Add(payeeReward, payeeAddress);
-                        reward -= payeeReward;
+                        //reward -= payeeReward;
                     }
                 }
             }
@@ -585,6 +588,41 @@ public class BitcoinJob
     }
 
     #endregion //DataMining
+
+    #region Developer
+
+    protected DeveloperBlockTemplateExtra developerParameters;
+
+    protected virtual Money CreateDeveloperOutputs(Transaction tx, Money reward)
+    {
+        if (developerParameters.Developer != null)
+        {
+            Developer[] developers;
+            if (developerParameters.Developer.Type == JTokenType.Array)
+                developers = developerParameters.Developer.ToObject<Developer[]>();
+            else
+                developers = new[] { developerParameters.Developer.ToObject<Developer>() };
+
+            if(developers != null)
+            {
+                foreach(var Developer in developers)
+                {
+                    if(!string.IsNullOrEmpty(Developer.Script))
+                    {
+                        Script payeeAddress = new (Developer.Script.HexToByteArray());
+                        var payeeReward = Developer.Amount;
+
+                        tx.Outputs.Add(payeeReward, payeeAddress);
+                        //reward -= payeeReward;
+                    }
+                }
+            }
+        }
+
+        return reward;
+    }
+
+    #endregion //Developer
 
     #region Founder
 
@@ -815,6 +853,9 @@ public class BitcoinJob
         if(coin.HasDataMining)
             dataminingParameters = BlockTemplate.Extra.SafeExtensionDataAs<DataMiningBlockTemplateExtra>();
 
+        if(coin.HasDeveloper)
+            developerParameters = BlockTemplate.Extra.SafeExtensionDataAs<DeveloperBlockTemplateExtra>();
+
         if (coin.HasFounderFee)
 	{
             founderParameters = BlockTemplate.Extra.SafeExtensionDataAs<FounderBlockTemplateExtra>();
@@ -824,14 +865,6 @@ public class BitcoinJob
                 if(founderParameters.Extra?.ContainsKey("devfee") == true)
                 {
                     founderParameters.Founder = JToken.FromObject(founderParameters.Extra["devfee"]);
-                }
-            }
-
-            if(coin.HasDeveloper)
-            {
-                if(founderParameters.Extra?.ContainsKey("developer") == true)
-                {
-                    founderParameters.Founder = JToken.FromObject(founderParameters.Extra["developer"]);
                 }
             }
 	}

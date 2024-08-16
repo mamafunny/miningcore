@@ -236,14 +236,18 @@ public class ProgpowJob : BitcoinJob
         if(coin.HasDataMining)
             dataminingParameters = BlockTemplate.Extra.SafeExtensionDataAs<DataMiningBlockTemplateExtra>();
 
+        if(coin.HasDeveloper)
+            developerParameters = BlockTemplate.Extra.SafeExtensionDataAs<DeveloperBlockTemplateExtra>();
+
         if (coin.HasFounderFee)
 	{
             founderParameters = BlockTemplate.Extra.SafeExtensionDataAs<FounderBlockTemplateExtra>();
-            if(coin.HasDeveloper)
+
+            if(coin.HasDevFee)
             {
-                if(founderParameters.Extra?.ContainsKey("developer") == true)
+                if(founderParameters.Extra?.ContainsKey("devfee") == true)
                 {
-                    founderParameters.Founder = JToken.FromObject(founderParameters.Extra["developer"]);
+                    founderParameters.Founder = JToken.FromObject(founderParameters.Extra["devfee"]);
                 }
             }
 	}

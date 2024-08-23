@@ -48,6 +48,7 @@ public class ProgpowPool : PoolBase
         {
             case "FIRO":
             case "KIIRO":
+            case "REALI":
                 return ProgpowUtils.FiroEncodeTarget(difficulty);
             
             default:
@@ -302,6 +303,7 @@ public class ProgpowPool : PoolBase
         {
             case "FIRO":
             case "KIIRO":
+            case "REALI":
                 return ctx.Resolve<ProgpowJobManager>(new TypedParameter(typeof(IExtraNonceProvider), new FiroExtraNonceProvider(poolConfig.Id, clusterConfig.InstanceId)));
             
             default:

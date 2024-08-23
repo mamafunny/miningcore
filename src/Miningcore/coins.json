@@ -2658,7 +2658,7 @@
         "explorerTxLink": "http://explorer.fuertecoin.network:3001/tx/{0}",
         "explorerAccountLink": "http://explorer.fuertecoin.network:3001/address/{0}"
     },
-	"kiirocoin": {
+    "kiirocoin": {
         "name": "KiiroCoin",
         "symbol": "KIIRO",
         "family": "progpow",
@@ -2690,6 +2690,40 @@
         "explorerBlockLink": "https://explorer.kiirocoin.org/block/$hash$",
         "explorerTxLink": "https://explorer.kiirocoin.org/tx/{0}",
         "explorerAccountLink": "https://explorer.kiirocoin.org/address/{0}"
+    },
+    "realichain": {
+        "name": "Realichain",
+        "symbol": "REALI",
+        "family": "progpow",
+        "progpower": "firopow",
+        "website": "https://realichain.org/",
+        "github": "https://github.com/Realichain/realichain",
+        "market": "",
+        "twitter": "",
+        "telegram": "",
+        "discord": "https://discord.gg/JnSJRtnwQq",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "hasCommunity": true,
+        "hasDeveloper": true,
+        "hasDataMining": true,
+        "hasMasterNodes": true,
+        "shareMultiplier": 1,
+        "explorerBlockLink": "https://blockscan.realichain.org/block/$hash$",
+        "explorerTxLink": "https://blockscan.realichain.org/tx/{0}",
+        "explorerAccountLink": "https://blockscan.realichain.org/address/{0}"
     },
     "neurai": {
         "name": "Neurai",

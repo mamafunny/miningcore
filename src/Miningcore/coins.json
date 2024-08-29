@@ -2934,7 +2934,7 @@
         },
         "hasFounderFee": true,
         "hasMasterNodes": true,
-	"hasSmartNodes": true,
+        "hasSmartNodes": true,
         "shareMultiplier": 65536,
         "explorerBlockLink": "http://explorer.ultronai.org/block/$hash$",
         "explorerTxLink": "http://explorer.ultronai.org/tx/{0}",

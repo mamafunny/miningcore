@@ -109,6 +109,18 @@
                     "variancePercent": 100,
                     "maxDelta": 512
                 }
+            },
+            "3096": {
+                "listenAddress": "0.0.0.0",
+                "difficulty": 256,
+                "varDiff": {
+                    "minDiff": 256,
+                    "maxDiff": null,
+                    "targetTime": 15,
+                    "retargetTime": 90,
+                    "variancePercent": 30,
+                    "maxDelta": 2048
+                }
             }
         },
         "daemons": [

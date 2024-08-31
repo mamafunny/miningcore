@@ -1052,6 +1052,33 @@
         "explorerTxLink": "https://chainz.cryptoid.info/dem/tx.dws?{0}.htm",
         "explorerAccountLink": "https://chainz.cryptoid.info/dem/address.dws?{0}.htm"
     },
+    "enig": {
+        "name": "Enig",
+        "symbol": "ENIG",
+        "family": "bitcoin",
+        "website": "https://enigplay.com/",
+        "github": "https://github.com/enigplay/enig",
+        "market": "",
+        "twitter": "https://x.com/weareenig",
+        "discord": "https://discord.gg/cf3sPZxmXH",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "ghostrider"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [ { "hash": "sha256d" } ]
+        },
+        "hasFounderFee": true,
+        "hasMasterNodes": true,
+        "hasSmartNodes": true,
+        "shareMultiplier": 65536,
+        "explorerBlockLink": "https://enigscan.com/block/$height$",
+        "explorerTxLink": "https://enigscan.com/tx/{0}",
+        "explorerAccountLink": "https://enigscan.com/address/{0}"
+    },
     "emrals": {
         "name": "Emrals",
         "canonicalName": "Emrals",
@@ -5241,6 +5268,32 @@
         "discord": "http://discord.gg/BHZvAhg",
         "explorerBlockLink": "https://explorer.beam.mw/block/$hash$",
         "explorerTxLink": "https://explorer.beam.mw/?searched_by={0}"
+    },
+    "arqma": {
+        "name": "ArQmA",
+        "symbol": "ARQ",
+        "family": "cryptonote",
+        "website": "https://arqma.com/",
+        "github": "https://github.com/arqma/arqma",
+        "market": "https://www.coingecko.com/en/coins/arqma",
+        "twitter": "https://twitter.com/ArQmA_Network",
+        "telegram": "",
+        "discord": "https://discord.gg/s9BQpJT",
+        "hash": "randomarq",
+        "hashVariant": 0,
+        "blobType": 0,
+        "smallestUnit": 1000000000,
+        "addressPrefix": 11466,
+        "addressPrefixStagenet": 14794,
+        "addressPrefixTestnet": 21450,
+        "addressPrefixIntegrated": 1141703,
+        "addressPrefixIntegratedStagenet": 1524426,
+        "addressPrefixIntegratedTestnet": 20554,
+        "subAddressPrefix": 26695,
+        "subAddressPrefixTestnet": 21066,
+        "subAddressPrefixStagenet": 1934538,
+        "explorerBlockLink": "https://explorer.arqma.com/block/$height$",
+        "explorerTxLink": "https://explorer.arqma.com/tx/{0}"
     },
     "monero": {
         "name": "Monero",

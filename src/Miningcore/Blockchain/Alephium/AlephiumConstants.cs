@@ -22,6 +22,9 @@ public static class AlephiumConstants
 
     public const string BlockTypeUncle = "uncle";
     public const string BlockTypeBlock = "block";
+
+    public static readonly Regex RegexUserAgentGoldShell = new("goldshell", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    public static readonly Regex RegexUserAgentIceRiverMiner = new("iceriverminer", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     
     // Socket miner API
     public const int MessageHeaderSize = 4; // 4 bytes body length

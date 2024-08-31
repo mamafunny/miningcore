@@ -7,6 +7,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -571,6 +572,26 @@ public class AlephiumJobManager : JobManagerBase<AlephiumJob>
             ex => logger.Debug(ex));
 
         return validity?.Group1 >= 0;
+    }
+
+    public bool ValidateIsGoldShell(string userAgent)
+    {
+        if(string.IsNullOrEmpty(userAgent))
+            return false;
+        
+        // Find matches
+        MatchCollection matchesUserAgentGoldShell = AlephiumConstants.RegexUserAgentGoldShell.Matches(userAgent);
+        return (matchesUserAgentGoldShell.Count > 0);
+    }
+
+    public bool ValidateIsIceRiverMiner(string userAgent)
+    {
+        if(string.IsNullOrEmpty(userAgent))
+            return false;
+        
+        // Find matches
+        MatchCollection matchesUserAgentIceRiverMiner = AlephiumConstants.RegexUserAgentIceRiverMiner.Matches(userAgent);
+        return (matchesUserAgentIceRiverMiner.Count > 0);
     }
 
     #endregion // API-Surface

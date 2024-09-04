@@ -456,6 +456,14 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
 
                             block.Reward = (((blockHeader.Reward / coin.SmallestUnit) / (1m - reserveReward)) * miningReward) * coin.BlockrewardMultiplier;
                             break;
+
+                        case "XEQ":
+                            decimal EquilibriaMiningReward = EquilibriaConstants.EquilibriaMiningRewardInitial;
+                            decimal EquilibriaReserveReward = EquilibriaConstants.EquilibriaReserveRewardInitial;
+                            
+                            block.Reward = (((blockHeader.Reward / coin.SmallestUnit)) * EquilibriaMiningReward) * coin.BlockrewardMultiplier;
+                            break;
+
                         default:
                             block.Reward = (blockHeader.Reward / coin.SmallestUnit) * coin.BlockrewardMultiplier;
                             break;

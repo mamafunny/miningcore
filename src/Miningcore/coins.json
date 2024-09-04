@@ -2239,9 +2239,9 @@
         },
         "hasMasterNodes": true,
         "hasFoundation": true,
-        "explorerBlockLink": "https://explorer.pepecore.com/block/$hash$",
-        "explorerTxLink": "https://explorer.pepecore.com/tx/{0}",
-        "explorerAccountLink": "https://explorer.pepecore.com/address/{0}"
+        "explorerBlockLink": "https://explorer.pepepow.org/block/$hash$",
+        "explorerTxLink": "https://explorer.pepepow.org/tx/{0}",
+        "explorerAccountLink": "https://explorer.pepepow.org/address/{0}"
     },
     "peercoin": {
         "name": "Peercoin",
@@ -5294,6 +5294,32 @@
         "subAddressPrefixStagenet": 1934538,
         "explorerBlockLink": "https://explorer.arqma.com/block/$height$",
         "explorerTxLink": "https://explorer.arqma.com/tx/{0}"
+    },
+    "equilibria": {
+        "name": "Equilibria",
+        "symbol": "XEQ",
+        "family": "cryptonote",
+        "website": "http://equilibriacc.com/",
+        "github": "https://github.com/EquilibriaCC/Equilibria",
+        "market": "https://www.coingecko.com/en/coins/triton",
+        "twitter": "https://github.com/EquilibriaCC/Equilibria",
+        "telegram": "https://t.me/XEQCommunity",
+        "discord": "https://discord.com/invite/kEsfkddTRu",
+        "hash": "randomxeq",
+        "hashVariant": 22,
+        "blobType": 5,
+        "smallestUnit": 10000,
+        "addressPrefix": 289,
+        "addressPrefixStagenet": 614196,
+        "addressPrefixTestnet": 1334,
+        "addressPrefixIntegrated": 25247,
+        "addressPrefixIntegratedStagenet": 1957684,
+        "addressPrefixIntegratedTestnet": 23480,
+        "subAddressPrefix": 22944,
+        "subAddressPrefixTestnet": 182,
+        "subAddressPrefixStagenet": 2268980,
+        "explorerBlockLink": "https://explorer.equilibriacc.com/block/$height$",
+        "explorerTxLink": "https://explorer.equilibriacc.com/tx/{0}"
     },
     "monero": {
         "name": "Monero",

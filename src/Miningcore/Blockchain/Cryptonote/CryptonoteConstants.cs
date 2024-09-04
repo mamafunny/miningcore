@@ -42,6 +42,13 @@ public static class CryptonoteConstants
     public const decimal StaticTransactionFeeReserve = 0.03m; // in monero
 }
 
+public static class EquilibriaConstants
+{
+    public const int EquilibriaBlobType = 5;
+    public const decimal EquilibriaMiningRewardInitial = 0.25m;
+    public const decimal EquilibriaReserveRewardInitial = 0.75m;
+}
+
 public static class ZephyrConstants
 {
     public const int BlobType = 13;

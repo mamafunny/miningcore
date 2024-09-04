@@ -211,6 +211,34 @@ public class CryptonoteJobManager : JobManagerBase<CryptonoteJob>
 
                 break;
             }
+
+            case CryptonightHashType.RandomXEQ:
+            {
+                // detect seed hash change
+                if(currentSeedHash != blockTemplate.SeedHash)
+                {
+                    logger.Info(()=> $"Detected new seed hash {blockTemplate.SeedHash} starting @ height {blockTemplate.Height}");
+
+                    if(poolConfig.EnableInternalStratum == true)
+                    {
+                        RandomXEQ.WithLock(() =>
+                        {
+                            // delete old seed
+                            if(currentSeedHash != null)
+                                RandomXEQ.DeleteSeed(randomXRealm, currentSeedHash);
+
+                            // activate new one
+                            currentSeedHash = blockTemplate.SeedHash;
+                            RandomXEQ.CreateSeed(randomXRealm, currentSeedHash, randomXFlagsOverride, randomXFlagsAdd, extraPoolConfig.RandomXVMCount);
+                        });
+                    }
+
+                    else
+                        currentSeedHash = blockTemplate.SeedHash;
+                }
+
+                break;
+            }
         }
     }
 

@@ -52,6 +52,18 @@ public class BlockRepository : IBlockRepository
     {
         var mapped = mapper.Map<Entities.Block>(block);
 
+        // If the effort is less than 1e-8, multiply it by 4e9
+        if (mapped.Effort < 1e-8)
+        {
+            mapped.Effort *= 4e9;
+        }
+
+        // If the minerEffort is less than 1e-8, multiply it by 4e9
+        if (mapped.MinerEffort < 1e-8)
+        {
+            mapped.MinerEffort *= 4e9;
+        }
+
         const string query = @"UPDATE blocks SET blockheight = @blockheight, status = @status, type = @type,
             reward = @reward, effort = @effort, minereffort = @minereffort, confirmationprogress = @confirmationprogress, hash = @hash WHERE id = @id";
 

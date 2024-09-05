@@ -320,19 +320,19 @@ public class StatsRepository : IStatsRepository
         const string query =
             @"WITH tmp AS
             (
-            	SELECT
-            		ms.miner,
-            		ms.hashrate,
-            		ms.sharespersecond,
-            		ROW_NUMBER() OVER(PARTITION BY ms.miner ORDER BY ms.hashrate DESC) AS rk
-            	FROM (SELECT miner, SUM(hashrate) AS hashrate, SUM(sharespersecond) AS sharespersecond
-                   FROM minerstats
-                   WHERE poolid = @poolid AND created >= @from GROUP BY miner, created) ms
+                SELECT
+                    ms.miner,
+                    AVG(ms.hashrate) AS avg_hashrate,
+                    AVG(ms.sharespersecond) AS avg_sharespersecond,
+                    ROW_NUMBER() OVER(PARTITION BY ms.miner ORDER BY AVG(ms.hashrate) DESC) AS rk
+                FROM minerstats ms
+                WHERE ms.poolid = @poolid AND ms.created >= @from
+                GROUP BY ms.miner
             )
-            SELECT t.miner, t.hashrate, t.sharespersecond
+            SELECT t.miner, t.avg_hashrate AS hashrate, t.avg_sharespersecond AS sharespersecond
             FROM tmp t
             WHERE t.rk = 1
-            ORDER by t.hashrate DESC
+            ORDER BY t.avg_hashrate DESC
             OFFSET @offset FETCH NEXT @pageSize ROWS ONLY";
 
         return (await con.QueryAsync<Entities.MinerWorkerPerformanceStats>(new CommandDefinition(query,

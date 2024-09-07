@@ -38,6 +38,7 @@ public class CryptonoteJob
         { CryptonightHashType.RandomARQ, (realm, seedHex, data, result, _) => RandomARQ.CalculateHash(realm, seedHex, data, result) },
         { CryptonightHashType.RandomSCASH, (realm, seedHex, data, result, _) => RandomSCASH.CalculateHash(realm, seedHex, data, result) },
         { CryptonightHashType.RandomXEQ, (realm, seedHex, data, result, _) => RandomXEQ.CalculateHash(realm, seedHex, data, result) },
+        { CryptonightHashType.Panthera, (realm, seedHex, data, result, _) => Panthera.CalculateHash(realm, seedHex, data, result) },
         { CryptonightHashType.Cryptonight0, (_, _, data, result, height) => Cryptonight.CryptonightHash(data, result, CN_0, height) },
         { CryptonightHashType.Cryptonight1, (_, _, data, result, height) => Cryptonight.CryptonightHash(data, result, CN_1, height) },
         { CryptonightHashType.Cryptonight2, (_, _, data, result, height) => Cryptonight.CryptonightHash(data, result, CN_2, height) },

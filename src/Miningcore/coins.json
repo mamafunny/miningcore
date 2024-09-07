@@ -2620,6 +2620,39 @@
         "explorerTxLink": "https://ravencoin.network/rvn/transaction/{0}",
         "explorerAccountLink": "https://ravencoin.network/rvn/address/{0}"
     },
+    "ravencash": {
+        "name": "Ravencash",
+        "symbol": "RVH",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "https://ravencash.net/",
+		"github": "https://github.com/ravencash-net/ravencash",
+        "market": "",
+        "twitter": "https://x.com/ravencash_net",
+        "telegram": "",
+        "discord": "https://discord.com/invite/NVwcw3P2FF",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "shareMultiplier": 1,
+        "hasFounderFee": true,
+        "hasMasterNodes": true,
+		"hasSmartNodes": true,
+        "explorerBlockLink": "https://explorer.ravencash.net/block/$hash$",
+        "explorerTxLink": "https://explorer.ravencash.net/tx/{0}",
+        "explorerAccountLink": "https://explorer.ravencash.net/address/{0}"
+    },
     "firo": {
         "name": "Firo",
         "symbol": "FIRO",
@@ -5280,7 +5313,7 @@
         "telegram": "",
         "discord": "https://discord.gg/s9BQpJT",
         "hash": "randomarq",
-        "hashVariant": 0,
+        "hashVariant": 2,
         "blobType": 0,
         "smallestUnit": 1000000000,
         "addressPrefix": 11466,
@@ -5302,11 +5335,11 @@
         "website": "http://equilibriacc.com/",
         "github": "https://github.com/EquilibriaCC/Equilibria",
         "market": "https://www.coingecko.com/en/coins/triton",
-        "twitter": "https://github.com/EquilibriaCC/Equilibria",
+        "twitter": "https://twitter.com/equilibriadevs",
         "telegram": "https://t.me/XEQCommunity",
         "discord": "https://discord.com/invite/kEsfkddTRu",
         "hash": "randomxeq",
-        "hashVariant": 22,
+        "hashVariant": 0,
         "blobType": 5,
         "smallestUnit": 10000,
         "addressPrefix": 289,
@@ -5318,7 +5351,7 @@
         "subAddressPrefix": 22944,
         "subAddressPrefixTestnet": 182,
         "subAddressPrefixStagenet": 2268980,
-        "explorerBlockLink": "https://explorer.equilibriacc.com/block/$height$",
+        "explorerBlockLink": "https://explorer.equilibriacc.com/block/$hash$",
         "explorerTxLink": "https://explorer.equilibriacc.com/tx/{0}"
     },
     "monero": {
@@ -5368,6 +5401,33 @@
         "addressPrefixIntegratedTestnet": 31444,
         "explorerBlockLink": "https://explorer.conceal.network/index.html?hash=$hash$#blockchain_block",
         "explorerTxLink": "https://explorer.conceal.network/index.html?hash={0}#blockchain_transaction"
+    },
+    "scala": {
+        "name": "Scala",
+        "symbol": "XLA",
+        "family": "cryptonote",
+        "website": "https://scalaproject.io/",
+        "github": "https://github.com/scala-network/scala",
+        "market": "https://www.coingecko.com/en/coins/stellite",
+        "twitter": "https://twitter.com/ScalaHQ",
+        "telegram": "",
+        "discord": "https://discord.gg/8PhF342",
+        "hash": "panthera",
+        "hashVariant": 3,
+        "blobType": 14,
+        "difficultyTarget": 120,
+        "smallestUnit": 100,
+        "addressPrefix": 155,
+        "addressPrefixTestnet": 22944,
+        "addressPrefixStagenet": 1188378,
+        "addressPrefixIntegrated": 26009,
+        "addressPrefixIntegratedTestnet": 22048,
+        "addressPrefixIntegratedStagenet": 2548250,
+        "subAddressPrefix": 23578,
+        "subAddressPrefixTestnet": 22560,
+        "subAddressPrefixStagenet": 2859546,
+        "explorerBlockLink": "https://explorer.scalaproject.io/block/$hash$",
+        "explorerTxLink": "https://explorer.scalaproject.io/tx/{0}"
     },
     "zephyr": {
         "name": "Zephyr",

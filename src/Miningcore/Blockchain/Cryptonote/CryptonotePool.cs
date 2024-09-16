@@ -91,6 +91,7 @@ public class CryptonotePool : PoolBase
             // extract control vars from password
             var passParts = loginRequest.Password?.Split(PasswordControlVarsSeparator);
             var staticDiff = GetStaticDiffFromPassparts(passParts);
+            var startDiff = GetStartDiffFromPassparts(passParts);
 
             // Nicehash support
             var nicehashDiff = await GetNicehashStaticMinDiff(context, manager.Coin.Name, manager.Coin.GetAlgorithmName());
@@ -108,16 +109,37 @@ public class CryptonotePool : PoolBase
                     logger.Info(() => $"[{connection.ConnectionId}] Nicehash detected. Using miner supplied difficulty of {staticDiff.Value}");
             }
 
-            // Static diff
-            if(staticDiff.HasValue &&
-               (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
-                   context.VarDiff == null && staticDiff.Value > context.Difficulty))
-            {
-                context.VarDiff = null; // disable vardiff
-                context.SetDifficulty(staticDiff.Value);
-
-                logger.Info(() => $"[{connection.ConnectionId}] Static difficulty set to {staticDiff.Value}");
-            }
+			// Start diff
+			if(startDiff.HasValue)
+			{
+				if(context.VarDiff != null && startDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && startDiff.Value > context.Difficulty)
+				{
+					context.SetDifficulty(startDiff.Value);
+					logger.Info(() => $"[{connection.ConnectionId}] Start difficulty set to {startDiff.Value}");
+				}
+				else
+				{
+					context.SetDifficulty(context.VarDiff.Config.MinDiff);
+					logger.Info(() => $"[{connection.ConnectionId}] Start difficulty set to {context.VarDiff.Config.MinDiff}");
+				}
+			}
+			
+			// Static diff
+			if(staticDiff.HasValue && !startDiff.HasValue)
+			{
+				if(context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && staticDiff.Value > context.Difficulty)
+				{
+					context.VarDiff = null; // disable vardiff
+					context.SetDifficulty(staticDiff.Value);
+					logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
+				}
+				else
+				{
+					context.VarDiff = null; // disable vardiff
+					context.SetDifficulty(context.VarDiff.Config.MinDiff);
+					logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {context.VarDiff.Config.MinDiff}");
+				}
+			}
 
             // respond
             var loginResponse = new CryptonoteLoginResponse

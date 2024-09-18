@@ -329,6 +329,20 @@ public class PoolApiController : ApiControllerBase
                         block.InfoLink = blockInfobaseUrl.Replace(CoinMetaData.BlockHashPH, block.Hash);
                 }
             }
+
+            // kaspa effort fix start here
+            // If the effort is less than 1e-8, multiply it by 4e9
+            if(block.Effort < 1e-8)
+            {
+                block.Effort *= 4e9;
+            }
+
+            // If the minerEffort is less than 1e-8, multiply it by 4e9
+            if(block.MinerEffort < 1e-8)
+            {
+                block.MinerEffort *= 4e9;
+            }
+            // kaspa effort fix end here
         }
 
         var response = new PagedResultResponse<Responses.Block[]>(blocks, itemCount, pageCount);

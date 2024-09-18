@@ -2036,34 +2036,6 @@
         "explorerTxLink": "https://mazacha.in/tx/{0}",
         "explorerAccountLink": "https://mazacha.in/address/{0}"
     },
-    "maza": {
-        "name": "Maza",
-        "canonicalName": "Maza",
-        "symbol": "MAZA",
-        "family": "bitcoin",
-        "website": "",
-        "market": "",
-        "twitter": "",
-        "telegram": "",
-        "discord": "",
-        "coinbaseHasher": {
-            "hash": "sha256d"
-        },
-        "headerHasher": {
-            "hash": "sha256d"
-        },
-        "blockHasher": {
-            "hash": "reverse",
-            "args": [
-                {
-                    "hash": "sha256d"
-                }
-            ]
-        },
-        "explorerBlockLink": "https://mazacha.in/block/$hash$",
-        "explorerTxLink": "https://mazacha.in/tx/{0}",
-        "explorerAccountLink": "https://mazacha.in/address/{0}"
-    },
     "mincoin": {
         "name": "Mincoin",
         "canonicalName": "Mincoin",
@@ -5857,6 +5829,21 @@
         "explorerBlockLink": "https://explorer.bugna.org/blocks/$hash$",
         "explorerTxLink": "https://explorer.bugna.org/txs/{0}",
         "explorerAccountLink": "https://explorer.bugna.org/addresses/{0}"
+    },
+    "brics": {
+        "name": "Brics",
+        "canonicalName": "Brics",
+        "symbol": "BRICS",
+        "family": "kaspa",
+        "website": "https://bricspro.site/",
+        "github":  "https://github.com/brics18/bricsd",
+        "market": "",
+        "twitter": "https://x.com/BricNetwor59084",
+        "telegram": "https://t.co/2yxqWkh89G",
+        "discord": "",
+        "explorerBlockLink": "https://explorer.bricspro.site/blocks/$hash$",
+        "explorerTxLink": "https://explorer.bricspro.site/txs/{0}",
+        "explorerAccountLink": "https://explorer.bricspro.site/addresses/{0}"
     },
     "hoosat": {
         "name": "Hoosat",

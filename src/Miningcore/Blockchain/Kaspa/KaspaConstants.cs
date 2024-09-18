@@ -15,6 +15,15 @@ public static class BugnaConstants
     public const string ChainPrefixMainnet = "bugna";
 }
 
+public static class BricscoinConstants
+{
+    // List of BRICS prefixes: https://github.com/brics18/bricsd/blob/main/util/address.go
+    public const string ChainPrefixDevnet = "bricsdev";
+    public const string ChainPrefixSimnet = "bricssim";
+    public const string ChainPrefixTestnet = "bricstest";
+    public const string ChainPrefixMainnet = "brics";
+}
+
 public static class HoosatConstants
 {
     // List of HTN prefixes: https://github.com/Hoosat-Oy/HTND/blob/master/util/address.go

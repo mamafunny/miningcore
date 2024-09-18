@@ -410,8 +410,9 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
 
                 var blockHeader = rpcResult.Response.BlockHeader;
 
-                // update progress
-                block.ConfirmationProgress = Math.Min(1.0d, (double) blockHeader.Depth / CryptonoteConstants.PayoutMinBlockConfirmations);
+                // update progressint 
+                int PayoutMinBlockConfirmations = (coin.Symbol == "MRL") ? MoreloConstants.MoreloMinBlockConfirmations : CryptonoteConstants.PayoutMinBlockConfirmations;
+                block.ConfirmationProgress = Math.Min(1.0d, (double) blockHeader.Depth / PayoutMinBlockConfirmations);
                 result.Add(block);
 
                 messageBus.NotifyBlockConfirmationProgress(poolConfig.Id, block, coin);
@@ -427,7 +428,7 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
                 }
 
                 // matured and spendable?
-                if(blockHeader.Depth >= CryptonoteConstants.PayoutMinBlockConfirmations)
+                if(blockHeader.Depth >= PayoutMinBlockConfirmations)
                 {
                     block.Status = BlockStatus.Confirmed;
                     block.ConfirmationProgress = 1;

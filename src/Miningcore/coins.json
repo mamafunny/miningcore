@@ -1055,6 +1055,33 @@
         "explorerTxLink": "https://chainz.cryptoid.info/dem/tx.dws?{0}.htm",
         "explorerAccountLink": "https://chainz.cryptoid.info/dem/address.dws?{0}.htm"
     },
+    "enig": {
+        "name": "Enig",
+        "symbol": "ENIG",
+        "family": "bitcoin",
+        "website": "https://enigplay.com/",
+        "github": "https://github.com/enigplay/enig",
+        "market": "",
+        "twitter": "https://x.com/weareenig",
+        "discord": "https://discord.gg/cf3sPZxmXH",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "ghostrider"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [ { "hash": "sha256d" } ]
+        },
+        "hasFounderFee": true,
+        "hasMasterNodes": true,
+        "hasSmartNodes": true,
+        "shareMultiplier": 65536,
+        "explorerBlockLink": "https://enigscan.com/block/$height$",
+        "explorerTxLink": "https://enigscan.com/tx/{0}",
+        "explorerAccountLink": "https://enigscan.com/address/{0}"
+    },
     "emrals": {
         "name": "Emrals",
         "canonicalName": "Emrals",
@@ -2362,9 +2389,9 @@
         },
         "hasMasterNodes": true,
         "hasFoundation": true,
-        "explorerBlockLink": "https://explorer.pepecore.com/block/$hash$",
-        "explorerTxLink": "https://explorer.pepecore.com/tx/{0}",
-        "explorerAccountLink": "https://explorer.pepecore.com/address/{0}"
+        "explorerBlockLink": "https://explorer.pepepow.org/block/$hash$",
+        "explorerTxLink": "https://explorer.pepepow.org/tx/{0}",
+        "explorerAccountLink": "https://explorer.pepepow.org/address/{0}"
     },
     "peercoin": {
         "name": "Peercoin",
@@ -2742,6 +2769,39 @@
         "explorerBlockLink": "https://ravencoin.network/rvn/block/$hash$",
         "explorerTxLink": "https://ravencoin.network/rvn/transaction/{0}",
         "explorerAccountLink": "https://ravencoin.network/rvn/address/{0}"
+    },
+    "ravencash": {
+        "name": "Ravencash",
+        "symbol": "RVH",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "https://ravencash.net/",
+		"github": "https://github.com/ravencash-net/ravencash",
+        "market": "",
+        "twitter": "https://x.com/ravencash_net",
+        "telegram": "",
+        "discord": "https://discord.com/invite/NVwcw3P2FF",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "shareMultiplier": 1,
+        "hasFounderFee": true,
+        "hasMasterNodes": true,
+		"hasSmartNodes": true,
+        "explorerBlockLink": "https://explorer.ravencash.net/block/$hash$",
+        "explorerTxLink": "https://explorer.ravencash.net/tx/{0}",
+        "explorerAccountLink": "https://explorer.ravencash.net/address/{0}"
     },
     "firo": {
         "name": "Firo",
@@ -5388,6 +5448,58 @@
         "explorerBlockLink": "https://explorer.beam.mw/block/$hash$",
         "explorerTxLink": "https://explorer.beam.mw/?searched_by={0}"
     },
+    "arqma": {
+        "name": "ArQmA",
+        "symbol": "ARQ",
+        "family": "cryptonote",
+        "website": "https://arqma.com/",
+        "github": "https://github.com/arqma/arqma",
+        "market": "https://www.coingecko.com/en/coins/arqma",
+        "twitter": "https://twitter.com/ArQmA_Network",
+        "telegram": "",
+        "discord": "https://discord.gg/s9BQpJT",
+        "hash": "randomarq",
+        "hashVariant": 2,
+        "blobType": 0,
+        "smallestUnit": 1000000000,
+        "addressPrefix": 11466,
+        "addressPrefixStagenet": 14794,
+        "addressPrefixTestnet": 21450,
+        "addressPrefixIntegrated": 1141703,
+        "addressPrefixIntegratedStagenet": 1524426,
+        "addressPrefixIntegratedTestnet": 20554,
+        "subAddressPrefix": 26695,
+        "subAddressPrefixTestnet": 21066,
+        "subAddressPrefixStagenet": 1934538,
+        "explorerBlockLink": "https://explorer.arqma.com/block/$height$",
+        "explorerTxLink": "https://explorer.arqma.com/tx/{0}"
+    },
+    "equilibria": {
+        "name": "Equilibria",
+        "symbol": "XEQ",
+        "family": "cryptonote",
+        "website": "http://equilibriacc.com/",
+        "github": "https://github.com/EquilibriaCC/Equilibria",
+        "market": "https://www.coingecko.com/en/coins/triton",
+        "twitter": "https://twitter.com/equilibriadevs",
+        "telegram": "https://t.me/XEQCommunity",
+        "discord": "https://discord.com/invite/kEsfkddTRu",
+        "hash": "randomxeq",
+        "hashVariant": 0,
+        "blobType": 5,
+        "smallestUnit": 10000,
+        "addressPrefix": 289,
+        "addressPrefixStagenet": 614196,
+        "addressPrefixTestnet": 1334,
+        "addressPrefixIntegrated": 25247,
+        "addressPrefixIntegratedStagenet": 1957684,
+        "addressPrefixIntegratedTestnet": 23480,
+        "subAddressPrefix": 22944,
+        "subAddressPrefixTestnet": 182,
+        "subAddressPrefixStagenet": 2268980,
+        "explorerBlockLink": "https://explorer.equilibriacc.com/block/$hash$",
+        "explorerTxLink": "https://explorer.equilibriacc.com/tx/{0}"
+    },
     "monero": {
         "name": "Monero",
         "canonicalName": "Monero",
@@ -5461,6 +5573,60 @@
         "addressPrefixIntegratedTestnet": 31444,
         "explorerBlockLink": "https://explorer.conceal.network/index.html?hash=$hash$#blockchain_block",
         "explorerTxLink": "https://explorer.conceal.network/index.html?hash={0}#blockchain_transaction"
+    },
+    "salvium": {
+        "name": "Salvium",
+        "canonicalName": "Salvium",
+        "symbol": "SAL",
+        "family": "cryptonote",
+        "website": "https://salvium.io/",
+        "github": "https://github.com/salvium/salvium",
+        "market": "https://www.coingecko.com/en/coins/salvium",
+        "twitter": "https://x.com/salvium_io",
+        "telegram": "",
+        "discord": "https://discord.com/invite/P3rrAjkyYs",
+        "hash": "randomx",
+        "hashVariant": 0,
+        "blobType": 15,
+        "smallestUnit": 100000000,
+        "addressPrefix": 4125464,
+        "addressPrefixTestnet": 364819224,
+        "addressPrefixStagenet": 345944856,
+        "addressPrefixIntegrated": 90108696,
+        "addressPrefixIntegratedTestnet": 55924667160,
+        "addressPrefixIntegratedStagenet": 65301033752,
+        "subAddressPrefix": 257880856,
+        "subAddressPrefixTestnet": 2778641176,
+        "subAddressPrefixStagenet": 12155007768,
+        "explorerBlockLink": "https://explorer.salvium.io/block/$height$",
+        "explorerTxLink": "https://explorer.salvium.io/tx/{0}"
+    },
+    "scala": {
+        "name": "Scala",
+        "symbol": "XLA",
+        "family": "cryptonote",
+        "website": "https://scalaproject.io/",
+        "github": "https://github.com/scala-network/scala",
+        "market": "https://www.coingecko.com/en/coins/stellite",
+        "twitter": "https://twitter.com/ScalaHQ",
+        "telegram": "",
+        "discord": "https://discord.gg/8PhF342",
+        "hash": "panthera",
+        "hashVariant": 3,
+        "blobType": 14,
+        "difficultyTarget": 120,
+        "smallestUnit": 100,
+        "addressPrefix": 155,
+        "addressPrefixTestnet": 22944,
+        "addressPrefixStagenet": 1188378,
+        "addressPrefixIntegrated": 26009,
+        "addressPrefixIntegratedTestnet": 22048,
+        "addressPrefixIntegratedStagenet": 2548250,
+        "subAddressPrefix": 23578,
+        "subAddressPrefixTestnet": 22560,
+        "subAddressPrefixStagenet": 2859546,
+        "explorerBlockLink": "https://explorer.scalaproject.io/block/$hash$",
+        "explorerTxLink": "https://explorer.scalaproject.io/tx/{0}"
     },
     "zephyr": {
         "name": "Zephyr",

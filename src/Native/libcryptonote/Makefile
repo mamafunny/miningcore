@@ -15,7 +15,6 @@ OBJECTS = exports.o \
 	crypto/hash.o \
 	crypto/keccak.o \
 	common/base58.o \
-        salvium_oracle/pricing_record.o \
         zephyr_oracle/pricing_record.o
 
 all: $(TARGET)

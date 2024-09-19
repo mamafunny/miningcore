@@ -74,6 +74,7 @@ public class BeamPool : PoolBase
         {
             // extract control vars from password
             var staticDiff = GetStaticDiffFromPassparts(passParts);
+            var startDiff = GetStartDiffFromPassparts(passParts);
 
             // Nicehash support
             var nicehashDiff = await GetNicehashStaticMinDiff(context, coin.Name, coin.GetAlgorithmName());
@@ -92,9 +93,7 @@ public class BeamPool : PoolBase
             }
             
             // Static diff
-            if(staticDiff.HasValue &&
-               (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
-                   context.VarDiff == null && staticDiff.Value > context.Difficulty))
+            if(staticDiff.HasValue && !startDiff.HasValue && (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && staticDiff.Value > context.Difficulty))
             {
                 context.VarDiff = null; // disable vardiff
                 context.SetDifficulty(staticDiff.Value);
@@ -102,6 +101,12 @@ public class BeamPool : PoolBase
                 logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
             }
             
+            // Start diff
+            if(startDiff.HasValue && (context.VarDiff != null && startDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && startDiff.Value > context.Difficulty))
+            {
+                context.SetDifficulty(startDiff.Value);
+                logger.Info(() => $"[{connection.ConnectionId}] Start difficulty set to {startDiff.Value}");
+            }
             // setup worker context
             context.IsSubscribed = true;
             

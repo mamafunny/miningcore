@@ -18,8 +18,9 @@ OBJECTS = exports.o \
 	crypto/crypto-ops.o \
 	crypto/crypto-ops-data.o \
 	crypto/hash.o \
-	crypto/keccak.o \
+	crypto/keccak.o \ 
 	common/base58.o \
+        salvium_oracle/pricing_record.o \
         zephyr_oracle/pricing_record.o \
 	mingw_stubs.o
 

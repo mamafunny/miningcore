@@ -4,6 +4,7 @@ using Miningcore.Blockchain.Bitcoin.Configuration;
 using Miningcore.Blockchain.Bitcoin.DaemonResponses;
 using Miningcore.Blockchain.Progpow.Custom.Firo;
 using Miningcore.Blockchain.Progpow.Custom.Kiiro;
+using Miningcore.Blockchain.Progpow.Custom.Realichain;
 using Miningcore.Blockchain.Progpow.Custom.Telestai;
 using Miningcore.Configuration;
 using Miningcore.Contracts;
@@ -56,6 +57,9 @@ public class ProgpowJobManager : BitcoinJobManagerBase<ProgpowJob>
 
             case "KIIRO":
                 return new KiiroJob();
+
+            case "REALI":
+                return new RealichainJob();
 
             case "TLS":
                 return new TelestaiJob();

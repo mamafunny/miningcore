@@ -15,7 +15,7 @@ public class SccpowLight : IProgpowLight
     private readonly object cacheLock = new();
     private readonly Dictionary<int, Cache> caches = new();
     private Cache future;
-    public string AlgoName { get; } = "SccPow";
+    public string AlgoName { get; } = "FiroPow";
 
     public void Dispose()
     {

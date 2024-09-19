@@ -14,9 +14,9 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using Transaction = NBitcoin.Transaction;
 
-namespace Miningcore.Blockchain.Progpow.Custom.Kiiro;
+namespace Miningcore.Blockchain.Progpow.Custom.Realichain;
 
-public class KiiroJob : ProgpowJob
+public class RealichainJob : ProgpowJob
 {
     public override (Share Share, string BlockHex) ProcessShareInternal(ILogger logger,
         StratumConnection worker, ulong nonce, string inputHeaderHash, string mixHash)
@@ -136,15 +136,15 @@ public class KiiroJob : ProgpowJob
                         var payeeReward = masterNode.Amount;
 
                         tx.Outputs.Add(payeeReward, payeeAddress);
-                    /*  A block reward of 30 KIIRO/block is divided as follows:
+                    /*  A block reward of 4 REALI/block is divided as follows:
                     
-                            Miners (20%, 6 KIIRO)
-                            Masternodes (61%, 18.3 KIIRO)
-                            DataMining Fund (1%, 0.3 KIIRO)
-                            Developer Fund (9%, 2.7 KIIRO)
-                            Community Fund (9%, 2.7 KIIRO)
+                            Miners (20%, 0.8 REALI)
+                            Masternodes (37%, 1.48 REALI)
+                            DataMining Fund (2%, 0.08 REALI)
+                            Developer Fund (8%, 0.32 REALI)
+                            Community Fund (33%, 1.32 REALI)
                     */
-                        //reward -= payeeReward; // KIIRO does not deduct payeeReward from coinbasevalue (reward) since it's the amount which goes to miners
+                        //reward -= payeeReward; // REALI does not deduct payeeReward from coinbasevalue (reward) since it's the amount which goes to miners
                     }
                 }
             }

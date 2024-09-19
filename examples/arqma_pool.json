@@ -1,0 +1,148 @@
+﻿{
+	"logging": 
+	{
+		"level": "info",
+		"enableConsoleLog": true,
+		"enableConsoleColors": true,
+		"logFile": "",
+		"apiLogFile": "",
+		"logBaseDirectory": "",
+		"perPoolLogFile": false
+	},
+	"banning": 
+	{
+		"manager": "Integrated",
+		"banOnJunkReceive": true,
+		"banOnInvalidShares": false
+	},
+	"notifications": 
+	{
+		"enabled": false,
+		"email": 
+		{
+			"host": "smtp.example.com",
+			"port": 587,
+			"user": "user",
+			"password": "password",
+			"fromAddress": "info@yourpool.org",
+			"fromName": "support"
+		},
+		"admin": 
+		{
+			"enabled": false,
+			"emailAddress": "user@example.com",
+			"notifyBlockFound": true
+		}
+	},
+	"persistence": 
+	{
+		"postgres": 
+		{
+			"host": "127.0.0.1",
+			"port": 5432,
+			"user": "miningcore",
+			"password": "password",
+			"database": "miningcore"
+		}
+	},
+	"paymentProcessing": 
+	{
+		"enabled": true,
+		"interval": 600,
+		"shareRecoveryFile": "recovered-shares.txt"
+	},
+	"api": 
+	{
+		"enabled": true,
+		"listenAddress": "*",
+		"port": 4000,
+		"metricsIpWhitelist": [],
+		"rateLimiting": 
+		{
+			"disabled": true,
+			"rules": 
+			[
+				{
+					"Endpoint": "*",
+					"Period": "1s",
+					"Limit": 5
+				}
+			],
+			"ipWhitelist": 
+			[
+				""
+			]
+		}
+	},
+	"pools": 
+	[
+		{
+			"id": "arqma",
+			"enabled": true,
+			"coin": "zephyr",
+			"randomXRealm": "arqma",
+			"address": "ar2dDEehonEYXkJkXyZGNxAZhU8vFKmrtPKgebmKDpMvYz8YPjiRztfR5WMWpH8u6MCqsVpqnJ5bh5VVgP2Sw1Xh2iWsqC4ro",
+			"rewardRecipients": 
+			[
+				{
+					"address": "ar2dDEehonEYXkJkXyZGNxAZhU8vFKmrtPKgebmKDpMvYz8YPjiRztfR5WMWpH8u6MCqsVpqnJ5bh5VVgP2Sw1Xh2iWsqC4ro",
+					"percentage": 1
+				}
+			],
+			"blockRefreshInterval": 500,
+			"clientConnectionTimeout": 600,
+			"banning": 
+			{
+				"enabled": true,
+				"time": 600,
+				"invalidPercent": 50,
+				"checkThreshold": 50
+			},
+			"ports": 
+			{
+				"6360": 
+				{
+					"listenAddress": "0.0.0.0",
+					"difficulty": 50000,
+					"name": "CPU Mining",
+					"varDiff": 
+					{
+						"minDiff": 15000,
+						"maxDiff": null,
+						"targetTime": 15,
+						"retargetTime": 90,
+						"variancePercent": 30
+					}
+				}
+			},
+			"daemons": 
+			[
+				{
+					"host": "127.0.0.1",
+					"port": 19994,
+					"user": "user",
+					"password": "password"
+				},
+				{
+					"host": "127.0.0.1",
+					"port": 19995,
+					"user": "user",
+					"password": "password",
+					"category": "wallet"
+				}
+			],
+			"paymentProcessing": 
+			{
+				"enabled": true,
+				"minimumPayment": 0.25,
+				"minimumPaymentToPaymentId": 1.0,
+				"transferSplit": true,
+				"payoutScheme": "PPLNS",
+				"payoutSchemeConfig": 
+				{
+					"factor": 0.5
+				}
+			}
+		}
+	]
+}

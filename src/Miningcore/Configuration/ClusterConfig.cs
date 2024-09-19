@@ -390,6 +390,15 @@ public enum CryptonightHashType
     [EnumMember(Value = "randomarq")]
     RandomARQ,
 
+    [EnumMember(Value = "randomscash")]
+    RandomSCASH,
+
+    [EnumMember(Value = "randomxeq")]
+    RandomXEQ,
+
+    [EnumMember(Value = "panthera")]
+    Panthera,
+
     [EnumMember(Value = "cn0")]
     Cryptonight0,
 

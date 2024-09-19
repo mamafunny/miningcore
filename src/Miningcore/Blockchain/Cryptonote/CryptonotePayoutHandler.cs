@@ -410,8 +410,9 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
 
                 var blockHeader = rpcResult.Response.BlockHeader;
 
-                // update progress
-                block.ConfirmationProgress = Math.Min(1.0d, (double) blockHeader.Depth / CryptonoteConstants.PayoutMinBlockConfirmations);
+                // update progressint 
+                int PayoutMinBlockConfirmations = (coin.Symbol == "MRL") ? MoreloConstants.MoreloMinBlockConfirmations : CryptonoteConstants.PayoutMinBlockConfirmations;
+                block.ConfirmationProgress = Math.Min(1.0d, (double) blockHeader.Depth / PayoutMinBlockConfirmations);
                 result.Add(block);
 
                 messageBus.NotifyBlockConfirmationProgress(poolConfig.Id, block, coin);
@@ -427,7 +428,7 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
                 }
 
                 // matured and spendable?
-                if(blockHeader.Depth >= CryptonoteConstants.PayoutMinBlockConfirmations)
+                if(blockHeader.Depth >= PayoutMinBlockConfirmations)
                 {
                     block.Status = BlockStatus.Confirmed;
                     block.ConfirmationProgress = 1;
@@ -456,6 +457,20 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
 
                             block.Reward = (((blockHeader.Reward / coin.SmallestUnit) / (1m - reserveReward)) * miningReward) * coin.BlockrewardMultiplier;
                             break;
+
+                        case "XEQ":
+                            decimal EquilibriaMiningReward = EquilibriaConstants.EquilibriaMiningRewardInitial;
+                            decimal EquilibriaReserveReward = EquilibriaConstants.EquilibriaReserveRewardInitial;
+                            
+                            block.Reward = (((blockHeader.Reward / coin.SmallestUnit)) * EquilibriaMiningReward) * coin.BlockrewardMultiplier;
+                            break;
+
+                        case "MRL":
+                            decimal MoreloReserveReward = MoreloConstants.MoreloReserveRewardInitial;
+                            
+                            block.Reward = (((blockHeader.Reward / coin.SmallestUnit)) - MoreloReserveReward) * coin.BlockrewardMultiplier;
+                            break;
+
                         default:
                             block.Reward = (blockHeader.Reward / coin.SmallestUnit) * coin.BlockrewardMultiplier;
                             break;
@@ -477,7 +492,10 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
         var blockRewardRemaining = await base.UpdateBlockRewardBalancesAsync(con, tx, pool, block, ct);
 
         // Deduct static reserve for tx fees
-        blockRewardRemaining -= CryptonoteConstants.StaticTransactionFeeReserve;
+		var coin = poolConfig.Template.As<CryptonoteCoinTemplate>();
+		var StaticTransactionFeeReserve = (coin.Symbol == "MRL") ? MoreloConstants.MoreloStaticTransactionFeeReserve : CryptonoteConstants.StaticTransactionFeeReserve;
+
+        blockRewardRemaining -= StaticTransactionFeeReserve;
 
         return blockRewardRemaining;
     }

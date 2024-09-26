@@ -351,7 +351,7 @@ public class EthereumPayoutHandler : PayoutHandlerBase,
         // ensure we have enough peers
         var infoResponse = await rpcClient.ExecuteAsync<string>(logger, EC.GetPeerCount, ct);
 
-        if((networkType == EthereumNetworkType.Main || extraPoolConfig?.ChainTypeOverride == "Classic" || extraPoolConfig?.ChainTypeOverride == "Mordor" || networkType == EthereumNetworkType.MainPow || extraPoolConfig?.ChainTypeOverride == "Ubiq" || extraPoolConfig?.ChainTypeOverride == "EtherOne" || extraPoolConfig?.ChainTypeOverride == "Pink" || extraPoolConfig?.ChainTypeOverride == "OctaSpace" || extraPoolConfig?.ChainTypeOverride == "OctaSpaceTestnet" || extraPoolConfig?.ChainTypeOverride == "Hypra") &&
+        if((networkType == EthereumNetworkType.Main || extraPoolConfig?.ChainTypeOverride == "Classic" || extraPoolConfig?.ChainTypeOverride == "Mordor" || networkType == EthereumNetworkType.MainPow || extraPoolConfig?.ChainTypeOverride == "Ubiq" || extraPoolConfig?.ChainTypeOverride == "EtherOne" || extraPoolConfig?.ChainTypeOverride == "Pink" || extraPoolConfig?.ChainTypeOverride == "OctaSpace" || extraPoolConfig?.ChainTypeOverride == "OctaSpaceTestnet" || extraPoolConfig?.ChainTypeOverride == "Hypra" || extraPoolConfig?.ChainTypeOverride == "LuckyBits") &&
            (infoResponse.Error != null || string.IsNullOrEmpty(infoResponse.Response) ||
                infoResponse.Response.IntegralFromHex<int>() < EthereumConstants.MinPayoutPeerCount))
         {
@@ -469,6 +469,28 @@ public class EthereumPayoutHandler : PayoutHandlerBase,
                     return HypraConstants.GrayGlacierBlockReward;
 
                return HypraConstants.BaseRewardInitial;
+
+            case GethChainType.LuckyBits:
+                if(height >= LuckyBitsConstants.YearNineHeight)
+                    return LuckyBitsConstants.YearNineBlockReward;
+                if(height >= LuckyBitsConstants.YearEightHeight)
+                    return LuckyBitsConstants.YearEightBlockReward;
+                if(height >= LuckyBitsConstants.YearSevenHeight)
+                    return LuckyBitsConstants.YearSevenBlockReward;
+                if(height >= LuckyBitsConstants.YearSixHeight)
+                    return LuckyBitsConstants.YearSixBlockReward;
+                if(height >= LuckyBitsConstants.YearFiveHeight)
+                    return LuckyBitsConstants.YearFiveBlockReward;
+                if(height >= LuckyBitsConstants.YearFourHeight)
+                    return LuckyBitsConstants.YearFourBlockReward;
+                if(height >= LuckyBitsConstants.YearThreeHeight)
+                    return LuckyBitsConstants.YearThreeBlockReward;
+                if(height >= LuckyBitsConstants.YearTwoHeight)
+                    return LuckyBitsConstants.YearTwoBlockReward;
+                if(height >= LuckyBitsConstants.YearOneHeight)
+                    return LuckyBitsConstants.YearOneBlockReward;
+                
+               return LuckyBitsConstants.BaseRewardInitial;
             
             default:
                 throw new Exception("Unable to determine block reward: Unsupported chain type");

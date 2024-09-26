@@ -42,8 +42,17 @@ public static class FormatUtil
         {
             value /= 1000;
             i++;
-        } while(value > 1000);
+        } while(value > 1000 && i < QuantityUnits.Length - 1);
 
-        return Math.Round(value, 2) + QuantityUnits[i];
+        // Ensure the index is within the valid range
+        if (i >= 0 && i < QuantityUnits.Length)
+        {
+            return Math.Round(value, 2) + QuantityUnits[i];
+        }
+        else
+        {
+            // Handle the case where the index is out of bounds
+            throw new IndexOutOfRangeException("Index was outside the bounds of the QuantityUnits array.");
+        }
     }
 }

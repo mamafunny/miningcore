@@ -56,68 +56,72 @@ public class PPLNSBFPaymentScheme : IPayoutScheme
 
     #region IPayoutScheme
 
- public async Task UpdateBalancesAsync(IDbConnection con, IDbTransaction tx, IMiningPool pool, IPayoutHandler payoutHandler,
-    Block block, decimal blockReward, CancellationToken ct)
-{
-    var poolConfig = pool.Config;
-    var payoutConfig = poolConfig.PaymentProcessing.PayoutSchemeConfig;
-
-    // PPLNS window (see https://bitcointalk.org/index.php?topic=39832)
-    var window = payoutConfig?.ToObject<Config>()?.Factor ?? 2.0m;
-
-    // Calculate the block finder reward (10% of the block reward)
-    var blockFinderReward = blockReward * 0.1m;
-
-    // Calculate the total reward for miners (excluding block finder reward)
-    var totalRewardForMiners = blockReward - blockFinderReward;
-
-    // calculate rewards
-    var shares = new Dictionary<string, double>();
-    var rewards = new Dictionary<string, decimal>();
-    var shareCutOffDate = await CalculateRewardsAsync(pool, payoutHandler, window, block, totalRewardForMiners, shares, rewards, ct);
-
-    // Update balances for miner rewards
-    foreach (var address in rewards.Keys)
+    public async Task UpdateBalancesAsync(IDbConnection con, IDbTransaction tx, IMiningPool pool, IPayoutHandler payoutHandler, Block block, decimal blockReward, CancellationToken ct)
     {
-        var amount = rewards[address];
+        var poolConfig = pool.Config;
+        var payoutConfig = poolConfig.PaymentProcessing.PayoutSchemeConfig;
 
-        if (amount > 0)
+        // PPLNS window (see https://bitcointalk.org/index.php?topic=39832)
+        var window = payoutConfig?.ToObject<Config>()?.Factor ?? 2.0m;
+
+        // Calculate the block finder reward (10% of the block reward)
+        var blockFinderReward = blockReward * 0.1m;
+
+        // Calculate the total reward for miners (excluding block finder reward)
+        var totalRewardForMiners = blockReward - blockFinderReward;
+
+        // calculate rewards
+        var shares = new Dictionary<string, double>();
+        var rewards = new Dictionary<string, decimal>();
+        var shareCutOffDate = await CalculateRewardsAsync(pool, payoutHandler, window, block, totalRewardForMiners, shares, rewards, ct);
+
+        // Update balances for miner rewards
+        foreach (var address in rewards.Keys)
         {
-            logger.Info(() => $"Crediting {address} with {payoutHandler.FormatAmount(amount)} for {FormatUtil.FormatQuantity(shares[address])} ({shares[address]}) shares for block {block.BlockHeight}");
-            await balanceRepo.AddAmountAsync(con, tx, poolConfig.Id, address, amount, $"Reward for {FormatUtil.FormatQuantity(shares[address])} shares for block {block.BlockHeight}");
+            var amount = rewards[address];
+
+            if (amount > 0)
+            {
+                if (shares.ContainsKey(address))
+                {
+                    logger.Info(() => $"Crediting {address} with {payoutHandler.FormatAmount(amount)} for {FormatUtil.FormatQuantity(shares[address])} ({shares[address]}) shares for block {block.BlockHeight}");
+                    await balanceRepo.AddAmountAsync(con, tx, poolConfig.Id, address, amount, $"Reward for {FormatUtil.FormatQuantity(shares[address])} shares for block {block.BlockHeight}");
+                }
+                else
+                {
+                    logger.Warn(() => $"Address {address} not found in shares dictionary while processing block {block.BlockHeight}");
+                }
+            }
         }
-    }
 
-    // Handle block finder reward separately
-    logger.Info(() => $"Block finder reward: {payoutHandler.FormatAmount(blockFinderReward)} for block {block.BlockHeight} mined by {block.Miner}");
-    await balanceRepo.AddAmountAsync(con, tx, poolConfig.Id, block.Miner, blockFinderReward, $"Block finder reward for block {block.BlockHeight}");
+        // Handle block finder reward separately
+        logger.Info(() => $"Block finder reward: {payoutHandler.FormatAmount(blockFinderReward)} for block {block.BlockHeight} mined by {block.Miner}");
+        await balanceRepo.AddAmountAsync(con, tx, poolConfig.Id, block.Miner, blockFinderReward, $"Block finder reward for block {block.BlockHeight}");
 
-    // Delete discarded shares
-    if (shareCutOffDate.HasValue)
-    {
-        var cutOffCount = await shareRepo.CountSharesBeforeAsync(con, tx, poolConfig.Id, shareCutOffDate.Value, ct);
-
-        if (cutOffCount > 0)
+        // Delete discarded shares
+        if (shareCutOffDate.HasValue)
         {
-            await LogDiscardedSharesAsync(ct, poolConfig, block, shareCutOffDate.Value);
+            var cutOffCount = await shareRepo.CountSharesBeforeAsync(con, tx, poolConfig.Id, shareCutOffDate.Value, ct);
 
-            logger.Info(() => $"Deleting {cutOffCount} discarded shares before {shareCutOffDate.Value:O}");
-            await shareRepo.DeleteSharesBeforeAsync(con, tx, poolConfig.Id, shareCutOffDate.Value, ct);
+            if (cutOffCount > 0)
+            {
+                await LogDiscardedSharesAsync(ct, poolConfig, block, shareCutOffDate.Value);
+
+                logger.Info(() => $"Deleting {cutOffCount} discarded shares before {shareCutOffDate.Value:O}");
+                await shareRepo.DeleteSharesBeforeAsync(con, tx, poolConfig.Id, shareCutOffDate.Value, ct);
+            }
         }
+
+        // Diagnostics
+        var totalShareCount = shares.Values.ToList().Sum(x => new decimal(x));
+        var totalRewards = rewards.Values.ToList().Sum(x => x); // Total rewards distributed to miners
+
+        // Add the block finder reward to the total rewards
+        totalRewards += blockFinderReward;
+
+        if (totalRewards > 0)
+            logger.Info(() => $"{FormatUtil.FormatQuantity((double)totalShareCount)} ({Math.Round(totalShareCount, 2)}) shares contributed to a total payout of {payoutHandler.FormatAmount(totalRewards)} ({totalRewards / totalRewardForMiners * 100:0.00}% of block reward) to {rewards.Keys.Count + 1} addresses");
     }
-
- // Diagnostics
-var totalShareCount = shares.Values.ToList().Sum(x => new decimal(x));
-var totalRewards = rewards.Values.ToList().Sum(x => x); // Total rewards distributed to miners
-
-// Add the block finder reward to the total rewards
-totalRewards += blockFinderReward;
-
-if (totalRewards > 0)
-    logger.Info(() => $"{FormatUtil.FormatQuantity((double)totalShareCount)} ({Math.Round(totalShareCount, 2)}) shares contributed to a total payout of {payoutHandler.FormatAmount(totalRewards)} ({totalRewards / totalRewardForMiners * 100:0.00}% of block reward) to {rewards.Keys.Count + 1} addresses");
-
- }
-
 
     private async Task LogDiscardedSharesAsync(CancellationToken ct, PoolConfig poolConfig, Block block, DateTime value)
     {

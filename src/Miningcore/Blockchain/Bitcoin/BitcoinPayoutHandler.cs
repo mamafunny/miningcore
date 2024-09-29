@@ -217,7 +217,7 @@ public class BitcoinPayoutHandler : PayoutHandlerBase,
             {
                 var subtractFeesFrom = amounts.Keys.ToArray();
 
-                if(!poolConfig.Template.As<BitcoinTemplate>().HasMasterNodes)
+                if(!poolConfig.Template.As<BitcoinTemplate>().HasMasterNodes || coin.Symbol == "KIIRO")
                 {
                     args = new object[]
                     {

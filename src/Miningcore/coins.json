@@ -2695,6 +2695,39 @@
         "explorerTxLink": "https://explorer.globalsocialpost.com/tx/{0}",
         "explorerAccountLink": "https://explorer.globalsocialpost.com/address/{0}"
     },
+    "anokas": {
+        "name": "Anokas",
+        "symbol": "ANOK",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "https://anokas.tech/",
+        "github": "https://github.com/anokastech/Anokas-mainnet",
+        "market": "https://www.coingecko.com/en/coins/anokas-network",
+        "twitter": "https://twitter.com/anokas_network",
+        "telegram": "https://t.me/anokas_tech",
+        "discord": "https://discord.com/invite/8B8pAtA2Y5",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "shareMultiplier": 1,
+        "hasFounderFee": true,
+        "hasMasterNodes": true,
+        "hasSmartNodes": true,
+        "explorerBlockLink": "https://explorer.anokas.tech/block/$hash$",
+        "explorerTxLink": "https://explorer.anokas.tech/tx/{0}",
+        "explorerAccountLink": "https://explorer.anokas.tech/address/{0}"
+    },
     "radiant": {
         "name": "Radiant",
         "symbol": "RXD",
@@ -5471,6 +5504,32 @@
         "subAddressPrefixStagenet": 2268980,
         "explorerBlockLink": "https://explorer.equilibriacc.com/block/$hash$",
         "explorerTxLink": "https://explorer.equilibriacc.com/tx/{0}"
+    },
+    "gntl": {
+        "name": "GNTL Coin",
+        "symbol": "GNTL",
+        "family": "cryptonote",
+        "website": "https://gntl.cash/",
+        "github": "https://github.com/The-GNTL-Project/gntl",
+        "market": "https://coinpaprika.com/coin/gntl-gntl",
+        "twitter": "https://twitter.com/GNTLCoin",
+        "telegram": "https://t.me/gntlcoin",
+        "discord": "https://discord.com/invite/4HyVA2A",
+        "hash": "randomarq",
+        "hashVariant": 2,
+        "blobType": 0,
+        "smallestUnit": 1000000000,
+        "addressPrefix": 504557,
+        "addressPrefixStagenet": 26605,
+        "addressPrefixTestnet":  15501,
+        "addressPrefixIntegrated": 1848045,
+        "addressPrefixIntegratedStagenet": 911341,
+        "addressPrefixIntegratedTestnet": 292644,
+        "subAddressPrefix": 2159341,
+        "subAddressPrefixTestnet": 3221357,
+        "subAddressPrefixStagenet": 616429,
+        "explorerBlockLink": "https://explorer.gntl.cash/block/$hash$",
+        "explorerTxLink": "https://explorer.gntl.cash/tx/{0}"
     },
     "monero": {
         "name": "Monero",

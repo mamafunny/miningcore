@@ -243,7 +243,7 @@ public class BitcoinJob
                 raw = BlockTemplate.DefaultWitnessCommitment.HexToByteArray();
                 rawLength = (uint) raw.Length;
 
-                if (coin.Symbol == "RVH")
+                if (coin.Symbol == "RVH" || coin.Symbol == "ANOK")
                 {
                     // Compute witness commitment
                     raw = BlockTemplate.DefaultWitnessCommitment.HexToByteArray();

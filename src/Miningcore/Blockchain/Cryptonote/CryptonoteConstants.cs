@@ -42,6 +42,12 @@ public static class CryptonoteConstants
     public const decimal StaticTransactionFeeReserve = 0.03m; // in monero
 }
 
+public static class GntlConstants
+{
+    public const decimal GntlMiningRewardInitial = 0.99m; 
+    public const int GntlMinBlockConfirmations = 18; 
+}
+
 public static class MoreloConstants
 {
     public const decimal MoreloReserveRewardInitial = 5.555m; // MiningReward = BlockReward - ReserveReward 

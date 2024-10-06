@@ -411,7 +411,7 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
                 var blockHeader = rpcResult.Response.BlockHeader;
 
                 // update progressint 
-                int PayoutMinBlockConfirmations = (coin.Symbol == "MRL") ? MoreloConstants.MoreloMinBlockConfirmations : CryptonoteConstants.PayoutMinBlockConfirmations;
+                int PayoutMinBlockConfirmations = (coin.Symbol == "GNTL") ? GntlConstants.GntlMinBlockConfirmations : (coin.Symbol == "MRL") ? MoreloConstants.MoreloMinBlockConfirmations : CryptonoteConstants.PayoutMinBlockConfirmations;
                 block.ConfirmationProgress = Math.Min(1.0d, (double) blockHeader.Depth / PayoutMinBlockConfirmations);
                 result.Add(block);
 
@@ -469,6 +469,12 @@ public class CryptonotePayoutHandler : PayoutHandlerBase,
                             decimal MoreloReserveReward = MoreloConstants.MoreloReserveRewardInitial;
                             
                             block.Reward = (((blockHeader.Reward / coin.SmallestUnit)) - MoreloReserveReward) * coin.BlockrewardMultiplier;
+                            break;
+
+                        case "GNTL":
+                            decimal GntlMiningReward = GntlConstants.GntlMiningRewardInitial;
+                            
+                            block.Reward = (((blockHeader.Reward / coin.SmallestUnit)) * GntlMiningReward) * coin.BlockrewardMultiplier;
                             break;
 
                         default:

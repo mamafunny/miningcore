@@ -1416,6 +1416,37 @@
         "explorerTxLink": "https://freecash.info/transaction?hash={0}",
         "explorerAccountLink": "https://freecash.info/address?address={0}"
     },
+    "procyon": {
+        "name": "Procyon Coin",
+        "canonicalName":  "",
+        "symbol": "PRCO",
+        "family": "progpow",
+        "progpower": "kawpow",
+        "website": "",
+        "github":  "",
+        "market": "",
+        "twitter": "",
+        "telegram": "",
+        "discord": "16739860",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [
+                {
+                    "hash": "sha256d"
+                }
+            ]
+        },
+        "shareMultiplier": 1,
+        "explorerBlockLink": "https://explorer.procyoncoin.org/block/$hash$",
+        "explorerTxLink": "https://explorer.procyoncoin.org/transaction/{0}",
+        "explorerAccountLink": "https://explorer.procyoncoin.org/address/{0}"
+    },
     "frencoin": {
         "name": "Frencoin",
         "symbol": "FREN",
@@ -6302,5 +6333,30 @@
         "explorerBlockLink": "https://wartscan.io/block/$height$",
         "explorerTxLink": "https://wartscan.io/tx/{0}",
         "explorerAccountLink": "https://wartscan.io/account/{0}"
+    },
+    "x1coin": {
+        "name": "X1coin",
+        "canonicalName":  "",
+        "symbol": "X1C",
+        "family": "bitcoin",
+        "website": "https://x1coin.org/",
+        "github":  "",
+        "market": "",
+        "twitter": "https://twitter.com/x1coin",
+        "telegram": "",
+        "discord": "https://discord.gg/ZwfBkfq4q3",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [{ "hash": "sha256d" }]
+        },
+        "explorerBlockLink": "https://x1coin.info/block/$hash$",
+        "explorerTxLink": "https://x1coin.info/tx/{0}",
+        "explorerAccountLink": "https://x1coin.info/address/{0}"
     }
 }

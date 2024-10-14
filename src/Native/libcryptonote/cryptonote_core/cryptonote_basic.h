@@ -784,13 +784,9 @@ namespace cryptonote
       if (blob_type == BLOB_TYPE_CRYPTONOTE_XTA) FIELD(cycle48)
       if (blob_type == BLOB_TYPE_CRYPTONOTE_XHV) FIELD(pricing_record)
 
-<<<<<<< HEAD
-      if (blob_type == BLOB_TYPE_CRYPTONOTE_ZEPHYR) {
-=======
       if (blob_type == BLOB_TYPE_CRYPTONOTE_SALVIUM) {
         if (major_version >= 2) FIELD(salvium_pricing_record)
       } else if (blob_type == BLOB_TYPE_CRYPTONOTE_ZEPHYR) {
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
         if (major_version >= 4)
         {
           FIELD_N("pricing_record", zephyr_pricing_record)
@@ -825,12 +821,8 @@ namespace cryptonote
         }
       }
       if (blob_type == BLOB_TYPE_CRYPTONOTE_XLA && major_version >= 13) FIELD(signature)
-<<<<<<< HEAD
-    END_SERIALIZE() 
-=======
 
     END_SERIALIZE()
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
   };
 
   struct block: public block_header

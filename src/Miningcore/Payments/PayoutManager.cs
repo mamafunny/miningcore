@@ -140,6 +140,7 @@ public class PayoutManager : BackgroundService
 
                 if(equihashTemplate.UseBitcoinPayoutHandler)
                     return CoinFamily.Bitcoin;
+
                 break;
             
             case CoinFamily.Progpow:
@@ -168,11 +169,7 @@ public class PayoutManager : BackgroundService
                     if(!block.Effort.HasValue)  // fill block effort if empty
                         await CalculateBlockEffortAsync(pool, poolConfig, block, handler, ct);
 
-<<<<<<< HEAD
-                    if(!block.MinerEffort.HasValue)  // fill block effort if empty
-=======
                     if(!block.MinerEffort.HasValue)  // fill block miner effort if empty
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
                         await CalculateMinerEffortAsync(pool, poolConfig, block, handler, ct);
 
                     switch(block.Status)
@@ -255,10 +252,6 @@ public class PayoutManager : BackgroundService
 
     private async Task CalculateMinerEffortAsync(IMiningPool pool, PoolConfig poolConfig, Block block, IPayoutHandler handler, CancellationToken ct)
     {
-<<<<<<< HEAD
-
-=======
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
         // get share date-range
         var from = DateTime.MinValue;
         var to = block.Created;
@@ -271,11 +264,7 @@ public class PayoutManager : BackgroundService
             BlockStatus.Confirmed,
             BlockStatus.Orphaned,
             BlockStatus.Pending,
-<<<<<<< HEAD
-        }, block.Created));
-=======
         }, block.Created, ct));
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 
         if(lastBlock != null)
             from = lastBlock.Created;
@@ -284,11 +273,6 @@ public class PayoutManager : BackgroundService
 
         if(block.MinerEffort.HasValue)
             block.MinerEffort = handler.AdjustBlockEffort(block.MinerEffort.Value);
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     }
 
     protected override async Task ExecuteAsync(CancellationToken ct)

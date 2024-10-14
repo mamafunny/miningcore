@@ -26,22 +26,15 @@ OBJECTS = allium.o aurum.o bcrypt.o blake.o c11.o dcrypt.o fresh.o lane.o megabt
 	equi/crypto/sha1.o equi/crypto/sha512.o equi/crypto/sha256.o \
 	equi/crypto/hmac_sha256.o equi/crypto/equihash.o equi/crypto/ripemd160.o \
 	equi/equihashverify.o sha512_256.o sha256dt.o \
-<<<<<<< HEAD
 	skydoge.o yescrypt/sha256.o yescrypt/yescrypt.o yescrypt/yescrypt-opt.o \
 	yespower/crypto/blake2b-yp.o yespower/yespower-blake2b.o yespower/yespower-combined.o yespower/yespower-platform.o \
 	minotaur/crypto/sha256.o minotaur/crypto/yespower.o minotaur/minotaurx.o \
-	fishhash/3rdParty/keccak.o fishhash/fishhash.o
-=======
-        skydoge.o yescrypt/sha256.o yescrypt/yescrypt.o yescrypt/yescrypt-opt.o \
-        yespower/crypto/blake2b-yp.o yespower/yespower-blake2b.o yespower/yespower-combined.o yespower/yespower-platform.o \
-        minotaur/crypto/sha256.o minotaur/crypto/yespower.o minotaur/minotaurx.o \
-        fishhash/3rdParty/fishhash_keccak.o fishhash/fishhash.o \
-        flex/cryptonote/crypto/aesb.o flex/cryptonote/crypto/c_blake256.o flex/cryptonote/crypto/c_groestl.o flex/cryptonote/crypto/c_jh.o \
-        flex/cryptonote/crypto/c_keccak.o flex/cryptonote/crypto/c_skein.o flex/cryptonote/crypto/hash.o flex/cryptonote/crypto/oaes_lib.o flex/cryptonote/crypto/wild_keccak.o \
-        flex/cryptonote/cryptonight.o flex/cryptonote/cryptonight_dark.o flex/cryptonote/cryptonight_dark_lite.o flex/cryptonote/cryptonight_fast.o \
-        flex/cryptonote/cryptonight_lite.o flex/cryptonote/cryptonight_soft_shell.o flex/cryptonote/cryptonight_turtle.o flex/cryptonote/cryptonight_turtle_lite.o \
-        flex/flex.o 
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
+	fishhash/3rdParty/fishhash_keccak.o fishhash/fishhash.o \
+	flex/cryptonote/crypto/aesb.o flex/cryptonote/crypto/c_blake256.o flex/cryptonote/crypto/c_groestl.o flex/cryptonote/crypto/c_jh.o \
+	flex/cryptonote/crypto/c_keccak.o flex/cryptonote/crypto/c_skein.o flex/cryptonote/crypto/hash.o flex/cryptonote/crypto/oaes_lib.o flex/cryptonote/crypto/wild_keccak.o \
+	flex/cryptonote/cryptonight.o flex/cryptonote/cryptonight_dark.o flex/cryptonote/cryptonight_dark_lite.o flex/cryptonote/cryptonight_fast.o \
+	flex/cryptonote/cryptonight_lite.o flex/cryptonote/cryptonight_soft_shell.o flex/cryptonote/cryptonight_turtle.o flex/cryptonote/cryptonight_turtle_lite.o \
+	flex/flex.o 
 
 all: $(TARGET)
 

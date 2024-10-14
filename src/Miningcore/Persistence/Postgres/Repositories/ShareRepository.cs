@@ -75,24 +75,10 @@ public class ShareRepository : IShareRepository
         return con.QuerySingleAsync<long>(new CommandDefinition(query, new { poolId, miner}, tx, cancellationToken: ct));
     }
 
-<<<<<<< HEAD
-    public Task<double?> GetEffortBetweenCreatedAsync(IDbConnection con, string poolId, DateTime start, DateTime end)
-=======
     public Task<double?> GetEffortBetweenCreatedAsync(IDbConnection con, string poolId, double shareConst, DateTime start, DateTime end, CancellationToken ct)
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     {
         const string query = "SELECT SUM(difficulty / networkdifficulty) FROM shares WHERE poolid = @poolId AND created > @start AND created < @end";
 
-<<<<<<< HEAD
-        return con.QuerySingleAsync<double?>(query, new { poolId, start, end });
-    }
-
-    public Task<double?> GetMinerEffortBetweenCreatedAsync(IDbConnection con, string poolId, string miner, DateTime start, DateTime end)
-    {
-        const string query = "SELECT SUM(difficulty / networkdifficulty) FROM shares WHERE poolid = @poolId AND miner = @miner AND created > @start AND created < @end";
-
-        return con.QuerySingleAsync<double?>(query, new { poolId, miner, start, end });
-=======
         return con.QuerySingleAsync<double?>(new CommandDefinition(query, new { poolId, shareConst, start, end }, cancellationToken: ct));
     }
 
@@ -101,7 +87,6 @@ public class ShareRepository : IShareRepository
         const string query = "SELECT SUM(difficulty / networkdifficulty) FROM shares WHERE poolid = @poolId AND miner = @miner AND created > @start AND created < @end";
 
         return con.QuerySingleAsync<double?>(new CommandDefinition(query, new { poolId, miner, start, end }, cancellationToken: ct));
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     }
 
     public async Task DeleteSharesByMinerAsync(IDbConnection con, IDbTransaction tx, string poolId, string miner, CancellationToken ct)

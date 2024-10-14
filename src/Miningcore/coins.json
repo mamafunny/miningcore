@@ -1704,7 +1704,6 @@
         "explorerTxLink": "http://157.245.248.32:3000/#/tx/{0}",
         "explorerAccountLink": "http://157.245.248.32:3000/#/address/{0}"
     },
-<<<<<<< HEAD
     "keymaker": {
         "name": "Keymaker",
         "symbol": "KEYM",
@@ -1730,7 +1729,7 @@
         "explorerBlockLink": "https://explorer.keymaker.cc/block/$height$",
         "explorerTxLink": "https://explorer.keymaker.cc/tx/{0}",
         "explorerAccountLink": "https://explorer.keymaker.cc/address/{0}"
-=======
+    },
     "kylacoin": {
         "name": "Kylacoin",
         "symbol": "KCN",
@@ -1759,7 +1758,6 @@
         "explorerBlockLink": "https://kcnxp.com/block/$height$",
         "explorerTxLink": "https://kcnxp.com/tx/{0}",
         "explorerAccountLink": "https://kcnxp.com/address/{0}"
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     },
     "lanacoin": {
         "name": "Lanacoin",
@@ -5697,11 +5695,7 @@
         "github": "https://github.com/salvium/salvium",
         "market": "https://www.coingecko.com/en/coins/salvium",
         "twitter": "https://x.com/salvium_io",
-<<<<<<< HEAD
-        "telegram": "",
-=======
         "telegram": "https://t.me/salviumprotocol",
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
         "discord": "https://discord.com/invite/P3rrAjkyYs",
         "hash": "randomx",
         "hashVariant": 0,
@@ -5719,7 +5713,6 @@
         "explorerBlockLink": "https://explorer.salvium.io/block/$height$",
         "explorerTxLink": "https://explorer.salvium.io/tx/{0}"
     },
-<<<<<<< HEAD
     "scala": {
         "name": "Scala",
         "symbol": "XLA",
@@ -5747,8 +5740,6 @@
         "explorerBlockLink": "https://explorer.scalaproject.io/block/$hash$",
         "explorerTxLink": "https://explorer.scalaproject.io/tx/{0}"
     },
-=======
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     "zephyr": {
         "name": "Zephyr",
         "canonicalName": "Zephyr",
@@ -6037,22 +6028,6 @@
         "explorerTxLink": "https://explorer.bugna.org/txs/{0}",
         "explorerAccountLink": "https://explorer.bugna.org/addresses/{0}"
     },
-<<<<<<< HEAD
-    "brics": {
-        "name": "Brics",
-        "canonicalName": "Brics",
-        "symbol": "BRICS",
-        "family": "kaspa",
-        "website": "https://bricspro.site/",
-        "github":  "https://github.com/brics18/bricsd",
-        "market": "",
-        "twitter": "https://x.com/BricNetwor59084",
-        "telegram": "https://t.co/2yxqWkh89G",
-        "discord": "",
-        "explorerBlockLink": "https://explorer.bricspro.site/blocks/$hash$",
-        "explorerTxLink": "https://explorer.bricspro.site/txs/{0}",
-        "explorerAccountLink": "https://explorer.bricspro.site/addresses/{0}"
-=======
     "consensus": {
         "name": "Consensus Network",
         "canonicalName": "Consensus Network",
@@ -6070,7 +6045,6 @@
         "explorerBlockLink": "https://explorer.consensus-network.com/blocks/$hash$",
         "explorerTxLink": "https://explorer.consensus-network.com/txs/{0}",
         "explorerAccountLink": "https://explorer.consensus-network.com/addresses/{0}"
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     },
     "hoosat": {
         "name": "Hoosat",
@@ -6252,7 +6226,6 @@
         "explorerTxLink": "https://explorer.sedracoin.com/txs/{0}",
         "explorerAccountLink": "https://explorer.sedracoin.com/addresses/{0}"
     },
-<<<<<<< HEAD
 	"kobradag": {
         "name": "Kobradag",
         "canonicalName": "Kobradag",
@@ -6263,39 +6236,13 @@
         "twitter": "https://twitter.com/k0bradag",
         "telegram": "https://t.me/k0bradag",
         "discord": "https://discord.com/invite/ahnm5zENqg",
+        "addressBech32Prefix": "koda",
+        "addressBech32PrefixDevnet": "kodadev",
+        "addressBech32PrefixSimnet": "kodasim",
+        "addressBech32PrefixTestnet": "kodatest",
         "explorerBlockLink": "https://explorer.kobradag.online/blocks/$hash$",
         "explorerTxLink": "https://explorer.kobradag.online/txs/{0}",
         "explorerAccountLink": "https://explorer.kobradag.online/addresses/{0}"
-    },
-    "consensus": {
-        "name": "Consensus",
-        "canonicalName": "Consensus",
-        "symbol": "CSS",
-        "family": "kaspa",
-        "website": "https://consensus-network.com/",
-        "github": "https://github.com/consensus-network/consensusd",
-        "market": "",
-        "twitter": "https://twitter.com/Consensus_CSS",
-        "telegram": "https://t.me/consensus_network",
-        "discord": "",
-        "explorerBlockLink": "https://explorer.consensus-network.com/blocks/$hash$",
-        "explorerTxLink": "https://explorer.consensus-network.com/txs/{0}",
-        "explorerAccountLink": "https://explorer.consensus-network.com/addresses/{0}"
-    },
-    "pugdag": {
-        "name": "Pugdag",
-        "canonicalName": "Pugdag",
-        "symbol": "PUG",
-        "family": "kaspa",
-        "website": "https://pugdag.com/",
-        "github": "https://github.com/Pugdag/pugdagd",
-        "market": "https://xeggex.com/market/PUG_USDT?ref=660c7f77a13a5706f612bbc8",
-        "twitter": "https://twitter.com/pug_dag",
-        "telegram": "https://t.me/pug_dag",
-        "discord": "https://discord.com/invite/pugdag",
-        "explorerBlockLink": "https://explorer.pugdag.com/blocks/$hash$",
-        "explorerTxLink": "https://explorer.pugdag.com/txs/{0}",
-        "explorerAccountLink": "https://explorer.pugdag.com/addresses/{0}"
     },
     "nvolve": {
         "name": "Nvolve",
@@ -6323,35 +6270,6 @@
         "explorerTxLink": "https://explorer.nvolve.tech/tx/{0}",
         "explorerAccountLink": "https://explorer.nvolve.tech/address/{0}"
     },
-    "kylacoin": {
-        "name": "Kylacoin",
-        "symbol": "KCN",
-        "family": "bitcoin",
-        "website": "https://kylacoin.com/",
-        "market": "https://coinpaprika.com/coin/kcn-kylacoin",
-        "twitter": "https://twitter.com/kylacoin",
-        "telegram": "https://t.me/kylacoingroup",
-        "discord": "https://discord.gg/SHZr5zQVDT",
-        "coinbaseHasher": {
-            "hash": "sha3-256d"
-        },
-        "headerHasher": {
-            "hash": "flex"
-        },
-        "blockHasher": {
-            "hash": "reverse",
-            "args": [
-                {
-                    "hash": "sha3-256d"
-                }
-            ]
-        },
-        "payoutDecimalPlaces": 12,
-        "hasCoinbaseDevReward": true,
-        "explorerBlockLink": "https://kcnxp.com/block/$height$",
-        "explorerTxLink": "https://kcnxp.com/tx/{0}",
-        "explorerAccountLink": "https://kcnxp.com/address/{0}"
-=======
     "spectre-network": {
         "name": "Spectre Network",
         "canonicalName": "Spectre Network",
@@ -6384,6 +6302,5 @@
         "explorerBlockLink": "https://wartscan.io/block/$height$",
         "explorerTxLink": "https://wartscan.io/tx/{0}",
         "explorerAccountLink": "https://wartscan.io/account/{0}"
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     }
 }

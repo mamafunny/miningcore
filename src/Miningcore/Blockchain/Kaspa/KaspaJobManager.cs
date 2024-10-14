@@ -294,10 +294,6 @@ public class KaspaJobManager : JobManagerBase<KaspaJob>
 
                 return new KarlsencoinJob(customBlockHeaderHasher, customCoinbaseHasher, customShareHasher);
             case "CSS":
-<<<<<<< HEAD
-            case "PUG":
-=======
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
             case "NTL":
             case "NXL":
             case "PUG":

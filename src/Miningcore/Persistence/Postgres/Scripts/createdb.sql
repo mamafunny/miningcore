@@ -28,11 +28,7 @@ CREATE TABLE blocks
     type TEXT NULL,
     confirmationprogress FLOAT NOT NULL DEFAULT 0,
 	effort FLOAT NULL,
-<<<<<<< HEAD
 	minereffort FLOAT NULL,
-=======
-        minereffort FLOAT NULL,
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 	transactionconfirmationdata TEXT NOT NULL,
 	miner TEXT NULL,
 	reward decimal(28,12) NULL,

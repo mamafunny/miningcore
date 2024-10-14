@@ -66,12 +66,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "yespower/yespower.h"
 #include "shake/cshake.h"
 #include "shake/shake.h"
-<<<<<<< HEAD
 #include "memehash.h"
 #include "megabtx.h"
-=======
 #include "flex/flex.h"
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 
 #ifdef _WIN32
 #include "blake2/ref/blake2.h"
@@ -457,7 +454,6 @@ extern "C" MODULE_API void allium_export(const char *input, char *output, uint32
     allium_hash(input, output, input_len);
 }
 
-<<<<<<< HEAD
 extern "C" MODULE_API void aurum_export(const char *input, char *output, uint32_t input_len)
 {
 	aurum_hash(input, output, input_len);
@@ -473,9 +469,7 @@ extern "C" MODULE_API void megabtx_export(const char *input, char *output, uint3
 	megabtx_hash(input, output, input_len);
 }
 
-=======
 extern "C" MODULE_API void flex_export(const char *input, char *output)
 {
     flex_hash(input, output);
 }
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec

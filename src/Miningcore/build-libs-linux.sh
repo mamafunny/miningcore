@@ -40,20 +40,13 @@ export HAVE_FEATURE="$HAVE_AES $HAVE_SSE2 $HAVE_SSE3 $HAVE_SSSE3 $HAVE_PCLMUL $H
 (cd ../Native/libfiropow && make clean && make) && mv ../Native/libfiropow/libfiropow.so "$OutDir"
 (cd ../Native/libkawpow && make clean && make) && mv ../Native/libkawpow/libkawpow.so "$OutDir"
 (cd ../Native/libmeowpow && make clean && make) && mv ../Native/libmeowpow/libmeowpow.so "$OutDir"
-<<<<<<< HEAD
 (cd ../Native/libsccpow && make clean && make) && mv ../Native/libsccpow/libsccpow.so "$OutDir"
 (cd ../Native/libmeraki && make clean && make) && mv ../Native/libmeraki/libmeraki.so "$OutDir"
+(cd ../Native/libdero && make clean && make) && mv ../Native/libdero/libdero.so "$OutDir"
 
-((cd /tmp && rm -rf secp256k1 && git clone https://github.com/bitcoin-ABC/secp256k1 && cd secp256k1 && git checkout 04fabb44590c10a19e35f044d11eb5058aac65b2 && mkdir build && cd build && cmake -GNinja .. -DCMAKE_C_FLAGS=-fPIC -DSECP256K1_ENABLE_MODULE_RECOVERY=OFF -DSECP256K1_ENABLE_COVERAGE=OFF -DSECP256K1_ENABLE_MODULE_SCHNORR=ON && ninja) && (cd ../Native/libnexapow && cp /tmp/secp256k1/build/libsecp256k1.a . && make clean && make) && mv ../Native/libnexapow/libnexapow.so "$OutDir")
-((cd /tmp && rm -rf RandomX && git clone https://github.com/tevador/RandomX && cd RandomX && git checkout tags/v1.1.10 && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomx && cp /tmp/RandomX/build/librandomx.a . && make clean && make) && mv ../Native/librandomx/librandomx.so "$OutDir")
-((cd /tmp && rm -rf RandomARQ && git clone https://github.com/arqma/RandomARQ && cd RandomARQ && git checkout 14850620439045b319fa6398f5a164715c4a66ce && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomarq && cp /tmp/RandomARQ/build/librandomx.a . && make clean && make) && mv ../Native/librandomarq/librandomarq.so "$OutDir")
 ((cd /tmp && rm -rf RandomSCASH && git clone https://github.com/scashnetwork/RandomX && cd RandomSCASH && cd RandomSCASH && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomscash && cp /tmp/RandomSCASH/build/librandomx.a . && make clean && make) && mv ../Native/librandomscash/librandomscash.so "$OutDir")
 ((cd /tmp && rm -rf RandomXEQ && git clone https://github.com/EquilibriaCC/RandomXEQ && cd RandomXEQ && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomxeq && cp /tmp/RandomXEQ/build/librandomx.a . && make clean && make) && mv ../Native/librandomxeq/librandomxeq.so "$OutDir")
 ((cd /tmp && rm -rf Panthera && git clone https://github.com/scala-network/Panthera && cd Panthera && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/libpanthera && cp /tmp/Panthera/build/librandomx.a . && make clean && make) && mv ../Native/libpanthera/libpanthera.so "$OutDir")
-=======
-(cd ../Native/libdero && make clean && make) && mv ../Native/libdero/libdero.so "$OutDir"
-
 ((cd /tmp && rm -rf secp256k1 && git clone https://github.com/bitcoin-ABC/secp256k1 && cd secp256k1 && git checkout 04fabb44590c10a19e35f044d11eb5058aac65b2 && mkdir build && cd build && cmake -GNinja .. -DCMAKE_C_FLAGS=-fPIC -DSECP256K1_ENABLE_MODULE_RECOVERY=OFF -DSECP256K1_ENABLE_COVERAGE=OFF -DSECP256K1_ENABLE_MODULE_SCHNORR=ON && ninja) && (cd ../Native/libnexapow && cp /tmp/secp256k1/build/libsecp256k1.a . && make clean && make) && mv ../Native/libnexapow/libnexapow.so "$OutDir")
 ((cd /tmp && rm -rf RandomX && git clone https://github.com/tevador/RandomX && cd RandomX && git checkout tags/v1.2.1 && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomx && cp /tmp/RandomX/build/librandomx.a . && make clean && make) && mv ../Native/librandomx/librandomx.so "$OutDir")
 ((cd /tmp && rm -rf RandomARQ && git clone https://github.com/arqma/RandomARQ && cd RandomARQ && git checkout 3bcb6bafe63d70f8e6f78a0d431e71be2b638083 && mkdir build && cd build && cmake -DARCH=native .. && make) && (cd ../Native/librandomarq && cp /tmp/RandomARQ/build/librandomx.a . && make clean && make) && mv ../Native/librandomarq/librandomarq.so "$OutDir")
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec

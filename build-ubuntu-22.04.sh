@@ -4,11 +4,7 @@
 
 # install dev-dependencies
 sudo apt-get update; \
-<<<<<<< HEAD
-  sudo apt-get -y install dotnet6 git cmake ninja-build build-essential libssl-dev pkg-config libboost-all-dev libsodium-dev libzmq5 libgmp-dev
-=======
   sudo apt-get -y install dotnet-sdk-6.0 git cmake clang ninja-build build-essential libssl-dev pkg-config libboost-all-dev libsodium-dev libzmq5 libgmp-dev libc++-dev
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 
 (cd src/Miningcore && \
 BUILDIR=${1:-../../build} && \

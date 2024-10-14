@@ -276,13 +276,8 @@ public partial class KaspaCoinTemplate
     {
         switch(Symbol)
         {
-<<<<<<< HEAD
-            case "CSS":
-            case "PUG":
-=======
             case "AIX":
                 return "AstrixHash";
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
             case "KLS":
                 return "Karlsenhashv2";
             case "CSS":
@@ -296,7 +291,7 @@ public partial class KaspaCoinTemplate
             case "PYI":
                 return "Pyrinhash";
             case "SPR":
-                return " SpectreX";
+                return "SpectreX";
             default:
                 // TODO: return variant
                 return "kHeavyHash";

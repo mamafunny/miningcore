@@ -13,8 +13,6 @@ public class EthereumPoolConfigExtra
     /// Useful to specify the real chain type when running geth
     /// </summary>
     public string ChainTypeOverride { get; set; }
-<<<<<<< HEAD
-=======
     
     /// <summary>
     /// There are several reports of bad actors taking advantage of the old "Ethash Stratum V1" protocol in order to perform multiple dangerous attacks like man-in-the-middle (MITM) attacks
@@ -25,7 +23,6 @@ public class EthereumPoolConfigExtra
     /// "Ethash Stratum V1" protocol is disabled by default
     /// </summary>
     public bool EnableEthashStratumV1 { get; set; } = false;
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 
     /// <summary>
     /// getWork stream published via ZMQ

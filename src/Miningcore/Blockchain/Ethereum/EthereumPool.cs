@@ -4,7 +4,9 @@ using System.Reactive.Threading.Tasks;
 using Autofac;
 using AutoMapper;
 using Microsoft.IO;
+using Miningcore.Blockchain.Ethereum.Configuration;
 using Miningcore.Configuration;
+using Miningcore.Extensions;
 using Miningcore.JsonRpc;
 using Miningcore.Messaging;
 using Miningcore.Mining;
@@ -37,6 +39,7 @@ public class EthereumPool : PoolBase
 
     private EthereumJobManager manager;
     private EthereumCoinTemplate coin;
+    private EthereumPoolConfigExtra extraPoolConfig;
 
     #region // Protocol V2 handlers - https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt
 
@@ -115,7 +118,6 @@ public class EthereumPool : PoolBase
 
             // extract control vars from password
             var staticDiff = GetStaticDiffFromPassparts(passParts);
-            var startDiff = GetStartDiffFromPassparts(passParts);
 
             // Nicehash support
             var nicehashDiff = await GetNicehashStaticMinDiff(context, coin.Name, coin.GetAlgorithmName());
@@ -133,37 +135,16 @@ public class EthereumPool : PoolBase
                     logger.Info(() => $"[{connection.ConnectionId}] Nicehash detected. Using miner supplied difficulty of {staticDiff.Value}");
             }
 
-			// Start diff
-			if(startDiff.HasValue)
-			{
-				if(context.VarDiff != null && startDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && startDiff.Value > context.Difficulty)
-				{
-					context.SetDifficulty(startDiff.Value);
-					logger.Info(() => $"[{connection.ConnectionId}] Start difficulty set to {startDiff.Value}");
-				}
-				else
-				{
-					context.SetDifficulty(context.VarDiff.Config.MinDiff);
-					logger.Info(() => $"[{connection.ConnectionId}] Start difficulty set to {context.VarDiff.Config.MinDiff}");
-				}
-			}
-			
-			// Static diff
-			if(staticDiff.HasValue && !startDiff.HasValue)
-			{
-				if(context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && staticDiff.Value > context.Difficulty)
-				{
-					context.VarDiff = null; // disable vardiff
-					context.SetDifficulty(staticDiff.Value);
-					logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
-				}
-				else
-				{
-					context.VarDiff = null; // disable vardiff
-					context.SetDifficulty(context.VarDiff.Config.MinDiff);
-					logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {context.VarDiff.Config.MinDiff}");
-				}
-			}
+            // Static diff
+            if(staticDiff.HasValue &&
+               (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
+                   context.VarDiff == null && staticDiff.Value > context.Difficulty))
+            {
+                context.VarDiff = null; // disable vardiff
+                context.SetDifficulty(staticDiff.Value);
+
+                logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
+            }
 
             await connection.NotifyAsync(EthereumStratumMethods.SetDifficulty, new object[] { context.Difficulty });
             await connection.NotifyAsync(EthereumStratumMethods.MiningNotify, manager.GetJobParamsForStratum());
@@ -316,7 +297,6 @@ public class EthereumPool : PoolBase
 
             // Nicehash support
             var nicehashDiff = await GetNicehashStaticMinDiff(context, coin.Name, coin.GetAlgorithmName());
-            var startDiff = GetStartDiffFromPassparts(passParts);
 
             if(nicehashDiff.HasValue)
             {
@@ -332,20 +312,14 @@ public class EthereumPool : PoolBase
             }
 
             // Static diff
-            if(staticDiff.HasValue && !startDiff.HasValue && (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && staticDiff.Value > context.Difficulty))
+            if(staticDiff.HasValue &&
+               (context.VarDiff != null && staticDiff.Value >= context.VarDiff.Config.MinDiff ||
+                   context.VarDiff == null && staticDiff.Value > context.Difficulty))
             {
                 context.VarDiff = null; // disable vardiff
                 context.SetDifficulty(staticDiff.Value);
 
                 logger.Info(() => $"[{connection.ConnectionId}] Setting static difficulty of {staticDiff.Value}");
-
-            }
-
-            // Start diff
-            if(startDiff.HasValue && (context.VarDiff != null && startDiff.Value >= context.VarDiff.Config.MinDiff || context.VarDiff == null && startDiff.Value > context.Difficulty))
-            {
-                context.SetDifficulty(startDiff.Value);
-                logger.Info(() => $"[{connection.ConnectionId}] Start difficulty set to {startDiff.Value}");
             }
 
             logger.Info(() => $"[{connection.ConnectionId}] Authorized worker {workerValue}");
@@ -390,6 +364,7 @@ public class EthereumPool : PoolBase
     public override void Configure(PoolConfig pc, ClusterConfig cc)
     {
         coin = pc.Template.As<EthereumCoinTemplate>();
+        extraPoolConfig = pc.Extra.SafeExtensionDataAs<EthereumPoolConfigExtra>();
 
         base.Configure(pc, cc);
     }
@@ -512,6 +487,11 @@ public class EthereumPool : PoolBase
                     break;
 
                 // V1 Stratum methods
+                // There are several reports of bad actors taking advantage of the old "Ethash Stratum V1" protocol in order to perform multiple dangerous attacks like man-in-the-middle (MITM) attacks
+                // https://braiins.com/blog/hashrate-robbery-stratum-v2-fixes-this-and-more
+                // https://eips.ethereum.org/EIPS/eip-1571
+                // https://github.com/AndreaLanfranchi/EthereumStratum-2.0.0/issues/10#issuecomment-595053258
+                // Based on that critical fact, mining pool should be cautious of the risks of using a such deprecated and broken stratum protocol. Used it at your own risks.
                 case EthereumStratumMethods.SubmitLogin:
                     context.ProtocolVersion = 1;    // lock in protocol version
 
@@ -519,15 +499,6 @@ public class EthereumPool : PoolBase
                     break;
 
                 case EthereumStratumMethods.GetWork:
-<<<<<<< HEAD
-                    EnsureProtocolVersion(context, 1);
-                    
-                    await OnSubmitAsync(connection, tsRequest, ct, true);
-                    break;
-
-                case EthereumStratumMethods.SubmitWork:
-                    EnsureProtocolVersion(context, 1);
-=======
                     if(!extraPoolConfig.EnableEthashStratumV1)
                     {
                         logger.Info(() => $"[{connection.ConnectionId}] Unsupported RPC request: {JsonConvert.SerializeObject(request, serializerSettings)}");
@@ -547,9 +518,16 @@ public class EthereumPool : PoolBase
                     if(!extraPoolConfig.EnableEthashStratumV1)
                     {
                         logger.Info(() => $"[{connection.ConnectionId}] Unsupported RPC request: {JsonConvert.SerializeObject(request, serializerSettings)}");
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 
-                    await OnGetWorkAsync(connection, tsRequest);
+                        await connection.RespondErrorAsync(StratumError.Other, $"Unsupported request {request.Method}", request.Id);
+                    }
+                    else
+                    {
+                        EnsureProtocolVersion(context, 1);
+                        
+                        logger.Warn(() => $"Use of Ethash Stratum V1 method: {request.Method}");
+                        await OnSubmitAsync(connection, tsRequest, ct, true);
+                    }
                     break;
 
                 case EthereumStratumMethods.SubmitHashrate:

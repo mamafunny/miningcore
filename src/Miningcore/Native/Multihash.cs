@@ -219,17 +219,13 @@ public static unsafe class Multihash
     
     [DllImport("libmultihash", EntryPoint = "yespowerTIDE_export", CallingConvention = CallingConvention.Cdecl)]
     public static extern void yespowerTIDE(byte* input, void* output, uint inputLength);
-<<<<<<< HEAD
     
     [DllImport("libmultihash", EntryPoint = "x11gost_export", CallingConvention = CallingConvention.Cdecl)]
     public static extern void x11gost(byte* input, void* output, uint inputLength);
-	
-=======
 
     [DllImport("libmultihash", EntryPoint = "flex_export", CallingConvention = CallingConvention.Cdecl)]
     public static extern void flex(byte* input, void* output);
 
->>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     [DllImport("libmultihash", EntryPoint = "fishhash_get_context", CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr fishhashGetContext(bool fullContext = false);
 

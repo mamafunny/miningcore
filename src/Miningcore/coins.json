@@ -3232,6 +3232,52 @@
       "explorerTxLink": "https://explorer.novochain.ovh/tx/{0}",
       "explorerAccountLink": "https://explorer.novochain.ovh/address/{0}"
     },
+    "plexhive-sha256d": {
+        "name": "PlexHive",
+        "symbol": "PLHV",
+        "family": "bitcoin",
+        "website": "http://www.plexhive.com/",
+        "github": "https://github.com/PlexHive/PlexHive",
+        "market": "",
+        "twitter": "https://www.twitter.com/PlexHive_PLHV",
+        "discord": "https://discord.gg/GrvXQGtn",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "sha256d"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [ { "hash": "sha256d" } ]
+        },
+        "explorerBlockLink": "http://explorer.plexhive.com/block/$hash$",
+        "explorerTxLink": "http://explorer.plexhive.com/tx/{0}",
+        "explorerAccountLink": "http://explorer.plexhive.com/address/{0}"
+    },
+    "plexhive-minotaurx": {
+        "name": "PlexHive",
+        "symbol": "PLHV",
+        "family": "bitcoin",
+        "website": "http://www.plexhive.com/",
+        "github": "https://github.com/PlexHive/PlexHive",
+        "market": "",
+        "twitter": "https://www.twitter.com/PlexHive_PLHV",
+        "discord": "https://discord.gg/GrvXQGtn",
+        "coinbaseHasher": {
+            "hash": "sha256d"
+        },
+        "headerHasher": {
+            "hash": "minotaurx"
+        },
+        "blockHasher": {
+            "hash": "reverse",
+            "args": [ { "hash": "sha256d" } ]
+        },
+        "explorerBlockLink": "http://explorer.plexhive.com/block/$hash$",
+        "explorerTxLink": "http://explorer.plexhive.com/tx/{0}",
+        "explorerAccountLink": "http://explorer.plexhive.com/address/{0}"
+    },
     "pulsar": {
         "name": "Pulsar",
         "symbol": "PLSR",

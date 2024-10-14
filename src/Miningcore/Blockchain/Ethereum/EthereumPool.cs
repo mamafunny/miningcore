@@ -519,6 +519,7 @@ public class EthereumPool : PoolBase
                     break;
 
                 case EthereumStratumMethods.GetWork:
+<<<<<<< HEAD
                     EnsureProtocolVersion(context, 1);
                     
                     await OnSubmitAsync(connection, tsRequest, ct, true);
@@ -526,6 +527,27 @@ public class EthereumPool : PoolBase
 
                 case EthereumStratumMethods.SubmitWork:
                     EnsureProtocolVersion(context, 1);
+=======
+                    if(!extraPoolConfig.EnableEthashStratumV1)
+                    {
+                        logger.Info(() => $"[{connection.ConnectionId}] Unsupported RPC request: {JsonConvert.SerializeObject(request, serializerSettings)}");
+
+                        await connection.RespondErrorAsync(StratumError.Other, $"Unsupported request {request.Method}", request.Id);
+                    }
+                    else
+                    {
+                        EnsureProtocolVersion(context, 1);
+                        
+                        logger.Warn(() => $"Use of Ethash Stratum V1 method: {request.Method}");
+                        await OnGetWorkAsync(connection, tsRequest);
+                    }
+                    break;
+
+                case EthereumStratumMethods.SubmitWork:
+                    if(!extraPoolConfig.EnableEthashStratumV1)
+                    {
+                        logger.Info(() => $"[{connection.ConnectionId}] Unsupported RPC request: {JsonConvert.SerializeObject(request, serializerSettings)}");
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
 
                     await OnGetWorkAsync(connection, tsRequest);
                     break;

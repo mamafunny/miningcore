@@ -70,16 +70,23 @@ public class PoolApiController : ApiControllerBase
                 result.TotalBlocks = await cf.Run(con => blocksRepo.GetPoolBlockCountAsync(con, config.Id, ct));
                 result.TotalConfirmedBlocks = await cf.Run(con => blocksRepo.GetTotalConfirmedBlocksAsync(con, config.Id, ct));
                 result.TotalPendingBlocks = await cf.Run(con => blocksRepo.GetTotalPendingBlocksAsync(con, config.Id, ct));
+<<<<<<< HEAD
                 
                 // Get reward of the last confirmed block and set BlockReward
                 result.BlockReward = await cf.Run(con => blocksRepo.GetLastConfirmedBlockRewardAsync(con, config.Id, ct));
                 
                 var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, config.Id));
+=======
+                // get reward of the last confirmed block and set BlockReward
+                result.BlockReward = await cf.Run(con => blocksRepo.GetLastConfirmedBlockRewardAsync(con, config.Id, ct));
+                var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, config.Id, ct));
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
                 result.LastPoolBlockTime = lastBlockTime;
 
                 if(lastBlockTime.HasValue)
                 {
                     var startTime = lastBlockTime.Value;
+<<<<<<< HEAD
                     var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, config.Id, startTime, clock.Now));
 
                     //kaspa effort fix start here
@@ -90,6 +97,9 @@ public class PoolApiController : ApiControllerBase
                     }
                     //kaspa effort fix end here
 
+=======
+                    var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, config.Id, pool.ShareMultiplier, startTime, clock.Now, ct));
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
                     if(poolEffort.HasValue)
                         result.PoolEffort = poolEffort.Value;
                 }
@@ -154,16 +164,23 @@ public class PoolApiController : ApiControllerBase
         response.Pool.TotalBlocks = await cf.Run(con => blocksRepo.GetPoolBlockCountAsync(con, pool.Id, ct));
         response.Pool.TotalConfirmedBlocks = await cf.Run(con => blocksRepo.GetTotalConfirmedBlocksAsync(con, pool.Id, ct));
         response.Pool.TotalPendingBlocks = await cf.Run(con => blocksRepo.GetTotalPendingBlocksAsync(con, pool.Id, ct));
+<<<<<<< HEAD
 
         // Get reward of the last confirmed block and set BlockReward
         response.Pool.BlockReward = await cf.Run(con => blocksRepo.GetLastConfirmedBlockRewardAsync(con, pool.Id, ct));
         
         var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, pool.Id));
+=======
+        // get reward of the last confirmed block and set BlockReward
+        response.Pool.BlockReward = await cf.Run(con => blocksRepo.GetLastConfirmedBlockRewardAsync(con, pool.Id, ct));
+        var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, pool.Id, ct));
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
         response.Pool.LastPoolBlockTime = lastBlockTime;
 
         if(lastBlockTime.HasValue)
         {
             var startTime = lastBlockTime.Value;
+<<<<<<< HEAD
             var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, pool.Id, startTime, clock.Now));
 
             //kaspa effort fix start here
@@ -174,6 +191,9 @@ public class PoolApiController : ApiControllerBase
             }
             //kaspa effort fix end here
 
+=======
+            var poolEffort = await cf.Run(con => shareRepo.GetEffortBetweenCreatedAsync(con, pool.Id, poolInstance.ShareMultiplier, startTime, clock.Now, ct));
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
             if(poolEffort.HasValue)
                 response.Pool.PoolEffort = poolEffort.Value;
         }
@@ -451,6 +471,7 @@ public class PoolApiController : ApiControllerBase
                     stats.LastPaymentLink = string.Format(baseUrl, statsResult.LastPayment.TransactionConfirmationData);
             }
 
+<<<<<<< HEAD
  	    var lastBlockTime = await cf.Run(con => blocksRepo.GetLastMinerBlockTimeAsync(con, pool.Id, address));
             if(lastBlockTime.HasValue)
            {
@@ -472,6 +493,20 @@ public class PoolApiController : ApiControllerBase
             stats.PerformanceSamples = await GetMinerPerformanceInternal(perfMode, pool, address, ct);
         
             // Add total confirmed and pending blocks
+=======
+            var lastBlockTime = await cf.Run(con => blocksRepo.GetLastPoolBlockTimeAsync(con, pool.Id, ct));
+            if(lastBlockTime.HasValue)
+            {
+                var startTime = lastBlockTime.Value;
+                var minerEffort = await cf.Run(con => shareRepo.GetMinerEffortBetweenCreatedAsync(con, pool.Id, address, startTime, clock.Now, ct));
+                if(minerEffort.HasValue)
+                    stats.MinerEffort = minerEffort.Value;
+            }
+
+            stats.PerformanceSamples = await GetMinerPerformanceInternal(perfMode, pool, address, ct);
+
+            // add total confirmed and pending blocks
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
             var totalConfirmedBlocks = await cf.Run(con => statsRepo.GetMinerTotalConfirmedBlocksAsync(con, pool.Id, address, ct));
             var totalPendingBlocks = await cf.Run(con => statsRepo.GetMinerTotalPendingBlocksAsync(con, pool.Id, address, ct));
             stats.TotalConfirmedBlocks = totalConfirmedBlocks;

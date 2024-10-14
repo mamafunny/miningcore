@@ -343,6 +343,7 @@ public class BitcoinJob
         if(coin.HasCoinbaseDevReward)
             rewardToPool = CreateCoinbaseDevRewardOutputs(tx, rewardToPool);
 
+<<<<<<< HEAD
         if(coin.HasFoundation)
             rewardToPool = CreateFoundationOutputs(tx, rewardToPool);
 
@@ -355,6 +356,8 @@ public class BitcoinJob
         if(coin.HasDeveloper)
             rewardToPool = CreateDeveloperOutputs(tx, rewardToPool);
 
+=======
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
         // Remaining amount goes to pool
         tx.Outputs.Add(rewardToPool, poolAddressDestination);
 
@@ -410,7 +413,7 @@ public class BitcoinJob
             Nonce = nonce
         };
 
-        return blockHeader.ToBytes();
+            return blockHeader.ToBytes();
     }
 
     protected virtual (Share Share, string BlockHex) ProcessShareInternal(
@@ -817,7 +820,11 @@ public class BitcoinJob
             {
                 if(!string.IsNullOrEmpty(CBReward.ScriptPubkey))
                 {
+<<<<<<< HEAD
                     Script payeeAddress = new (CBReward.ScriptPubkey.HexToByteArray());
+=======
+                    Script payeeAddress = new Script(CBReward.ScriptPubkey.HexToByteArray());
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
                     var payeeReward = CBReward.Value;
                     tx.Outputs.Add(payeeReward, payeeAddress);
                 }
@@ -828,6 +835,7 @@ public class BitcoinJob
 
     #endregion // CoinbaseDevReward
 
+<<<<<<< HEAD
     #region Foundation
 
     protected FoundationBlockTemplateExtra foundationParameters;
@@ -862,6 +870,8 @@ public class BitcoinJob
 
     #endregion // Foundation
 
+=======
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     #region API-Surface
 
     public BlockTemplate BlockTemplate { get; protected set; }
@@ -960,12 +970,18 @@ public class BitcoinJob
         if (coin.HasMinerFund)
             minerFundParameters = BlockTemplate.Extra.SafeExtensionDataAs<MinerFundTemplateExtra>("coinbasetxn", "minerfund");
 
+<<<<<<< HEAD
 	if(coin.HasCoinbaseDevReward)
             CoinbaseDevRewardParams = BlockTemplate.Extra.SafeExtensionDataAs<CoinbaseDevRewardTemplateExtra>();
 
 	if(coin.HasFoundation)
             foundationParameters = BlockTemplate.Extra.SafeExtensionDataAs<FoundationBlockTemplateExtra>();
 
+=======
+        if(coin.HasCoinbaseDevReward)
+            CoinbaseDevRewardParams = BlockTemplate.Extra.SafeExtensionDataAs<CoinbaseDevRewardTemplateExtra>();
+
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
         this.coinbaseHasher = coinbaseHasher;
         this.headerHasher = headerHasher;
         this.blockHasher = blockHasher;

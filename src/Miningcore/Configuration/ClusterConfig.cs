@@ -51,6 +51,9 @@ public enum CoinFamily
 
     [EnumMember(Value = "progpow")]
     Progpow,
+
+    [EnumMember(Value = "warthog")]
+    Warthog,
 }
 
 public abstract partial class CoinTemplate
@@ -166,6 +169,7 @@ public abstract partial class CoinTemplate
         {CoinFamily.Kaspa, typeof(KaspaCoinTemplate)},
         {CoinFamily.Nexa, typeof(BitcoinTemplate)},
         {CoinFamily.Progpow, typeof(ProgpowCoinTemplate)},
+        {CoinFamily.Warthog, typeof(WarthogCoinTemplate)},
     };
 }
 
@@ -202,8 +206,10 @@ public partial class BitcoinTemplate : CoinTemplate
     [JsonConverter(typeof(StringEnumConverter), true)]
     public BitcoinSubfamily Subfamily { get; set; }
 
+    public JObject MerkleTreeHasher { get; set; }
     public JObject CoinbaseHasher { get; set; }
     public JObject HeaderHasher { get; set; }
+    public JObject ShareHasher { get; set; }
     public JObject BlockHasher { get; set; }
 
     [JsonProperty("posBlockHasher")]
@@ -257,9 +263,12 @@ public partial class BitcoinTemplate : CoinTemplate
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public bool HasCoinbaseDevReward { get; set; }
 
+<<<<<<< HEAD
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public bool HasFoundation { get; set; }
 
+=======
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     [DefaultValue(1.0d)]
     public double ShareMultiplier { get; set; } = 1.0d;
@@ -695,6 +704,37 @@ public partial class EthereumCoinTemplate : CoinTemplate
 
 public partial class KaspaCoinTemplate : CoinTemplate
 {
+    /// <summary>
+    /// Prefix of a valid mainnet address
+    /// See: parameter -> Bech32PrefixKaspa in blob/master/util/address.go
+    /// </summary>
+    public string AddressBech32Prefix { get; set; }
+
+    /// <summary>
+    /// Prefix of a valid devnet address
+    /// See: parameter -> Bech32PrefixKaspaDev in blob/master/util/address.go
+    /// </summary>
+    public string AddressBech32PrefixDevnet { get; set; }
+
+    /// <summary>
+    /// Prefix of a valid simnet address
+    /// See: parameter -> Bech32PrefixKaspaSim in blob/master/util/address.go
+    /// </summary>
+    public string AddressBech32PrefixSimnet { get; set; }
+
+    /// <summary>
+    /// Prefix of a valid testnet address
+    /// See: parameter -> Bech32PrefixKaspaTest in blob/master/util/address.go
+    /// </summary>
+    public string AddressBech32PrefixTestnet { get; set; }
+
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    [DefaultValue(1.0d)]
+    public double ShareMultiplier { get; set; } = 1.0d;
+
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    [DefaultValue(4294967296.0d)]
+    public double HashrateMultiplier { get; set; } = 4294967296.0d;
 }
 
 public partial class ProgpowCoinTemplate : BitcoinTemplate
@@ -703,6 +743,10 @@ public partial class ProgpowCoinTemplate : BitcoinTemplate
     /// Which hashing algorithm to use. (kawpow or firopow)
     /// </summary>
     public string Progpower { get; set; } = "kawpow";
+}
+
+public partial class WarthogCoinTemplate : CoinTemplate
+{
 }
 
 #endregion // Coin Definitions
@@ -925,6 +969,8 @@ public partial class PoolShareBasedBanningConfig
     public int CheckThreshold { get; set; } // Check stats when this many shares have been submitted
     public double InvalidPercent { get; set; } // What percent of invalid shares triggers ban
     public int Time { get; set; } // How many seconds to ban worker for
+    public double? MinerEffortPercent { get; set; } // What percent of effort triggers ban
+    public int? MinerEffortTime { get; set; } // How many seconds to ban worker for
 }
 
 public partial class PoolPaymentProcessingConfig

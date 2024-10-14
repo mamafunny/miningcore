@@ -6,6 +6,8 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Miningcore.Configuration;
+using Miningcore.Contracts;
 using Miningcore.Crypto;
 using Miningcore.Crypto.Hashing.Algorithms;
 using Miningcore.Util;
@@ -15,8 +17,10 @@ namespace Miningcore.Blockchain.Kaspa;
 
 public static class KaspaUtils
 {
-    public static (KaspaAddressUtility, Exception) ValidateAddress(string address, string network, string coinSymbol = "KAS")
+    public static (KaspaAddressUtility, Exception) ValidateAddress(string address, string network, KaspaCoinTemplate coin)
     {
+        Contract.RequiresNonNull(coin);
+
         if(string.IsNullOrEmpty(address))
             return (null, new ArgumentException($"Empty address..."));
         
@@ -44,7 +48,7 @@ public static class KaspaUtils
         
         try
         {
-            var kaspaAddressUtility = new KaspaAddressUtility(coinSymbol);
+            var kaspaAddressUtility = new KaspaAddressUtility(coin);
             kaspaAddressUtility.DecodeAddress(address, networkBech32Prefix);
 
             return (kaspaAddressUtility, null);
@@ -57,7 +61,7 @@ public static class KaspaUtils
     
     public static BigInteger DifficultyToTarget(double difficulty)
     {
-        return BigInteger.Divide(KaspaConstants.Diff1Target, new BigInteger(difficulty));
+        return (BigInteger) BigRational.Divide(new BigRational(KaspaConstants.Diff1Target), new BigRational(difficulty));
     }
 
     public static BigInteger CalculateTarget(uint bits)
@@ -89,12 +93,7 @@ public static class KaspaUtils
 
     public static double TargetToDifficulty(BigInteger target)
     {
-        return (double) new BigRational(KaspaConstants.Diff1Target, target);
-    }
-    
-    public static double DifficultyToHashrate(double diff)
-    {
-        return (double) new BigRational(BigInteger.Multiply(BigInteger.Multiply(KaspaConstants.MinHash, KaspaConstants.BigGig), new BigInteger(diff)), KaspaConstants.Diff1);
+        return (double) BigRational.Divide(new BigRational(KaspaConstants.Diff1Target), new BigRational(target));
     }
     
     public static double BigDiffToLittle(BigInteger diff)
@@ -172,16 +171,6 @@ public static class KaspaUtils
         }
 
         return compact;
-    }
-
-    public static double CalcWork(uint bits)
-    {
-        BigInteger difficultyNum = CompactToBig(bits);
-
-        if (difficultyNum.Sign <= 0)
-            return (double) BigInteger.Zero;
-        
-        return (double) new BigRational(KaspaConstants.OneLsh256, BigInteger.Add(difficultyNum, KaspaConstants.BigOne));
     }
 
     public static byte[] HashBlake2b(byte[] serializedScript)
@@ -345,15 +334,20 @@ public class KaspaAddressScriptHash : KaspaIAddress
 public class KaspaAddressUtility
 {
     public KaspaIAddress KaspaAddress { get; private set; }
-    public string CoinSymbol { get; private set; }
-    
-    public KaspaAddressUtility(string coinSymbol = "KAS")
-    {
-        this.CoinSymbol = coinSymbol;
+    public KaspaCoinTemplate coin { get; private set; }
 
-        // Build address pattern based on network type and coin symbol
-        switch(this.CoinSymbol)
+    private Dictionary<string, KaspaBech32Prefix> stringsToBech32Prefixes;
+    
+    public KaspaAddressUtility(KaspaCoinTemplate coin)
+    {
+        Contract.RequiresNonNull(coin);
+
+        this.coin = coin;
+
+        // Build address pattern based on network type and KaspaCoinTemplate
+        this.stringsToBech32Prefixes = new Dictionary<string, KaspaBech32Prefix>
         {
+<<<<<<< HEAD
             case "PUG":
                 this.stringsToBech32Prefixes = new Dictionary<string, KaspaBech32Prefix>
                 {
@@ -495,6 +489,13 @@ public class KaspaAddressUtility
 
                 break;
         }
+=======
+            { this.coin.AddressBech32Prefix, KaspaBech32Prefix.KaspaMain },
+            { this.coin.AddressBech32PrefixDevnet, KaspaBech32Prefix.KaspaDev },
+            { this.coin.AddressBech32PrefixSimnet, KaspaBech32Prefix.KaspaSim },
+            { this.coin.AddressBech32PrefixTestnet, KaspaBech32Prefix.KaspaTest }
+        };
+>>>>>>> 69de0d393ec56f3e0535f3b09f6de93d6299beec
     }
 
     public string EncodeAddress(KaspaBech32Prefix prefix, byte[] payload, byte version)
@@ -549,8 +550,6 @@ public class KaspaAddressUtility
 
         return string.Empty;
     }
-
-    private Dictionary<string, KaspaBech32Prefix> stringsToBech32Prefixes;
 }
 
 public static class KaspaBech32
